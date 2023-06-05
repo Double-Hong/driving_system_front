@@ -1,5 +1,6 @@
 <template>
 <button>ajdlksjadslsalkjdalsjdas</button>
+  <button>杨洹</button>
 </template>
 
 <script lang="ts">
