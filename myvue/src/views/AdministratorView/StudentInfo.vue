@@ -3,8 +3,19 @@
 </template>
 
 <script>
+import {inject} from "vue";
+
 export default {
-  name: "StudentInfo"
+  name: "StudentInfo",
+  setup(){
+    const peopleId = inject('peopleId')
+    alert(inject('peopleId'))
+
+    return{
+      peopleId,
+
+    }
+  }
 }
 </script>
 

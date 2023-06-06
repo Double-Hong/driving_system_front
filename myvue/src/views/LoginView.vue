@@ -52,7 +52,6 @@ export default defineComponent({
     const login = () => {
       if(userType.value=="教练"){
         request.post("/coach-entity/coachLogin",form.value).then(res=>{
-          console.log(res.data)
           if(res.data.length!=0){
             ElMessage({
               message: '登录成功',
@@ -71,8 +70,6 @@ export default defineComponent({
         })
       }else{
         request.post("/student-entity/studentLogin/",form.value).then((res) => {
-          console.log(res.data)
-          console.log(res.data.length)
           if(res.data.length!=0){
             ElMessage({
               message: '登录成功',
@@ -91,6 +88,8 @@ export default defineComponent({
         })
       }
     }
+
+
       return {
         login,
         form,

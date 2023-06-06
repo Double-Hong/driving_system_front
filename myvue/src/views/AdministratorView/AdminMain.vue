@@ -10,9 +10,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive} from "vue";
+import {defineComponent, reactive, ref} from "vue";
 import router from "@/router";
 import {useRouter} from "vue-router";
+import {provide} from "vue";
 
 export default defineComponent({
   name: "AdminMain",
@@ -20,13 +21,13 @@ export default defineComponent({
   created() {
     const myRouter = useRouter()
     this.pageInfo.peopleId = <string>myRouter.currentRoute.value.params.peopleId
+    provide('peopleId', this.pageInfo.peopleId)
   },
   setup(){
     const pageInfo = reactive({
       peopleId: '',
     })
-
-
+    // const message = ref(0)
     const goToStudentInfo = () => {
       router.push({
         path: '/adminMain/' + pageInfo.peopleId + '/studentInfo'
