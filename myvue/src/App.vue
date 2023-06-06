@@ -1,19 +1,7 @@
 <template>
-<!--  <header>-->
-<!--    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />-->
 
-<!--    <div class="wrapper">-->
-<!--      <HelloWorld msg="You did it!" />-->
-
-<!--      <nav>-->
-<!--        <RouterLink to="/">Home</RouterLink>-->
-<!--        <RouterLink to="/about">About</RouterLink>-->
-<!--      </nav>-->
-<!--    </div>-->
-<!--  </header>-->
 <login-view/>
 
-<!--  <RouterView />-->
 </template>
 
 
@@ -24,6 +12,13 @@ import LoginView from "@/views/LoginView.vue";
 </script>
 
 <style scoped>
+/*html,body{*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  margin: 0;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*}*/
 header {
   line-height: 1.5;
   max-height: 100vh;
