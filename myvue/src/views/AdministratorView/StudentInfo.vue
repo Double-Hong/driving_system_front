@@ -1,5 +1,5 @@
 <template>
-
+<p>StudentInfo</p>
 </template>
 
 <script>

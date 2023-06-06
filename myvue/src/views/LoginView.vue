@@ -13,6 +13,13 @@
       <el-input style="width: 20%" v-model="form.password" show-password clearable maxlength="20"></el-input>
     </div>
 
+    <div id="three">
+      <el-radio-group v-model="userType" size="large">
+        <el-radio-button label="学员" style="width: 200px" />
+        <el-radio-button label="教练" style="width: 200px" />
+      </el-radio-group>
+    </div>
+
     <el-button @click="login" id="loginButton">登录</el-button>
 
   </div>
@@ -34,29 +41,61 @@ export default defineComponent({
   },
   setup() {
 
-
+    //用户登录信息
     const form = ref({
       username: '',
       password: ''
     })
+    //用户登录类型
+    const userType= ref('学员')
+    //用户登录
     const login = () => {
-      request.post("/student-entity/studentLogin/",form.value).then((res) => {
-        console.log(res.data)
-        console.log(res.data.length)
-        if(res.data.length!=0){
-          // router.push("/student")
-        }
-        else if(res.data.length==0){
-          ElMessage({
-            message: '用户名或密码错误',
-            type: 'error'
-          })
-        }
-
-      })}
+      if(userType.value=="教练"){
+        request.post("/coach-entity/coachLogin",form.value).then(res=>{
+          console.log(res.data)
+          if(res.data.length!=0){
+            ElMessage({
+              message: '登录成功',
+              type: 'success'
+            })
+            router.push({
+              path:'/adminMain/'+res.data[0].coachId
+            })
+          }
+          else if(res.data.length==0){
+            ElMessage({
+              message: '用户名或密码错误',
+              type: 'error'
+            })
+          }
+        })
+      }else{
+        request.post("/student-entity/studentLogin/",form.value).then((res) => {
+          console.log(res.data)
+          console.log(res.data.length)
+          if(res.data.length!=0){
+            ElMessage({
+              message: '登录成功',
+              type: 'success'
+            })
+            router.push({
+              // path:'/adminMain'
+            })
+          }
+          else if(res.data.length==0){
+            ElMessage({
+              message: '用户名或密码错误',
+              type: 'error'
+            })
+          }
+        })
+      }
+    }
       return {
         login,
         form,
+        userType,
+
       }
     }
 
@@ -92,10 +131,17 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
 }
+#three{
+  position: absolute;
+  /*background-color: #2c3e50;*/
+  width: 40%;
+  top: 57%;
+  left:42.5% ;
+}
 #loginButton{
   position: absolute;
   width: 6%;
-  top: 57%;
+  top: 67%;
   left: 42%;
 }
 </style>
