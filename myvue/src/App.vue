@@ -1,6 +1,6 @@
 <template>
 
-<login-view/>
+<router-view/>
 
 </template>
 
