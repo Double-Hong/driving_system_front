@@ -4,9 +4,11 @@
 </template>
 
 <script lang="ts">
-export default {
-  name: "LoginView"
-}
+import {defineComponent} from "vue";
+export default  defineComponent({
+  name: "LoginView",
+
+})
 </script>
 
 <style scoped>
