@@ -11,16 +11,14 @@
 <!--      </nav>-->
 <!--    </div>-->
 <!--  </header>-->
-<login-view/>
+<router-view/>
 
 <!--  <RouterView />-->
 </template>
 
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import LoginView from "@/views/LoginView.vue";
+
 </script>
 
 <style scoped>
