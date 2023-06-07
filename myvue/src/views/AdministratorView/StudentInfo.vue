@@ -1,5 +1,5 @@
 <template>
-<!--  搜索框-->
+  <!--  搜索框-->
   <el-card class="box-card">
     <el-row>
       <el-col :span="12"><div class="grid-content ep-bg-purple" />
@@ -24,7 +24,7 @@
     </el-table>
   </el-card>
 
-<!--  添加/修改信息框-->
+  <!--  添加/修改信息框-->
   <el-dialog @close="closeForm" :title="title" :visible.sync="dialogFormVisible">
     <el-form :model="studentForm" ref="studentFormRef" :rules="rules">
       <!-- prop属性是验证字段正确性时与rules里对应的验证规则匹配 -->
@@ -56,46 +56,16 @@
 
 </template>
 
-<script lang="ts">
-import { reactive, ref } from 'vue'
-import {defineComponent} from "vue/dist/vue";
-import request from "@/request/request";
-import router from "@/router";
-import {ElMessage} from "element-plus";
-import {KeyboardOne, Me} from "@icon-park/vue-next";
+<script>
+import {defineComponent} from "vue";
 
-
-const dialogTableVisible = ref(false)
-const dialogFormVisible = ref(false)
-const formLabelWidth = '140px'
 export default defineComponent({
-  name: "StudentView",
-  components: {
-    Me, KeyboardOne
-  },
-  setup() {
-    const studentForm = ref({
-      student_name: '',
-      birthday: '',
-      phone: '',
-      email: '',
-      gender: '',
-      study_type: ''
-    })
+name:"studentList",
+  created() {
 
-    const search = () => {
-      request.post("/student-entity/studentLogin/", studentForm.value).then((res) => {
-
-      })
-    }
-    return {
-      search,
-      studentForm,
-    }
   }
+
 })
-
-
 </script>
 
 <style scoped>
