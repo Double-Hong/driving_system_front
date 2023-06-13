@@ -76,7 +76,7 @@ export default defineComponent({
               type: 'success'
             })
             router.push({
-              // path:'/adminMain'
+              path:'/studentHome/'+res.data[0].studentId
             })
           }
           else if(res.data.length==0){

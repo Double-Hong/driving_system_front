@@ -9,7 +9,6 @@ export default {
   name: "StudentInfo",
   setup(){
     const peopleId = inject('peopleId')
-    alert(inject('peopleId'))
 
     return{
       peopleId,
