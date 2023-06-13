@@ -30,6 +30,31 @@ const router = createRouter({
       path:'/students/:userid',
       name:'students',
        component:()=> import('@/views/StudentsView/StudentsHomeView.vue')
+    },
+    {
+      path:'/personInfo/:userid',
+      name:'personInfo',
+      component:()=> import('@/views/StudentsView/PeronInfoView.vue')
+    },
+    {
+      path:'/SubjectOne/:userid',
+      name:'SubjectOne',
+      component:()=> import('@/views/StudentsView/SubjectOneView.vue')
+    },
+    {
+      path:'/SubjectTwo/:userid',
+      name:'SubjectTwo',
+      component:()=> import('@/views/StudentsView/SubjectTwoView.vue')
+    },
+    {
+      path:'/SubjectThreeTheory/:userid',
+      name:'SubjectThreeTheory',
+      component:()=> import('@/views/StudentsView/SubjectThreeTheoryView.vue')
+    },
+    {
+      path:'/SubjectThreePractice/:userid',
+      name:'SubjectThreePractice',
+      component:()=> import('@/views/StudentsView/SubjectThreePracticeView.vue')
     }
   ]
 })
