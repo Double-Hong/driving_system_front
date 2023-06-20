@@ -359,7 +359,8 @@ export default {
               }
               changeInfo.password=changePassWordInfo.newPassword
               request.post("/student-entity/updateStudentById",changeInfo).then(res=>{
-                  if (res.data === "1"){
+                console.log(res.data)
+                  if (res.data === 1){
                       ElMessage.success('修改密码成功')
                       changePassWordDialogVisible.value=false
                       request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
@@ -589,7 +590,7 @@ export default {
             }]
         })
         const  makeSureChangeCoach=()=>{
-            // if ()
+
         }
         return {
             options,
