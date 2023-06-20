@@ -13,6 +13,13 @@
       <el-input style="width: 20%" v-model="form.password" show-password clearable maxlength="20"></el-input>
     </div>
 
+    <div id="three">
+      <el-radio-group v-model="userType" size="large">
+        <el-radio-button label="学员" style="width: 200px" />
+        <el-radio-button label="教练" style="width: 200px" />
+      </el-radio-group>
+    </div>
+
     <el-button @click="login" id="loginButton">登录</el-button>
 
   </div>
@@ -24,10 +31,8 @@
 import {defineComponent, ref} from "vue";
 import {Me, KeyboardOne} from '@icon-park/vue-next'
 import request from "@/request/request";
-
+import router from "@/router";
 import {ElMessage} from "element-plus";
-import {useRouter} from "vue-router";
-
 
 export default defineComponent({
   name: "LoginView",
@@ -36,43 +41,62 @@ export default defineComponent({
   },
   setup() {
 
-
+    //用户登录信息
     const form = ref({
       username: '',
       password: ''
     })
-    const router = useRouter();
+    //用户登录类型
+    const userType= ref('学员')
+    //用户登录
     const login = () => {
-
-      request.post("/student-entity/studentLogin/",form.value).then(res => {
-        console.log(res.data)
-        console.log(res.data.length)
-        if(res.data.length!=0){
-          request.get("/student-entity/selectStudentIdByUserName/"+form.value.username).then(res=>{
-         let userid=res.data
-
-
-            router.push({
-              path:'/students/'+userid
+      if(userType.value=="教练"){
+        request.post("/coach-entity/coachLogin",form.value).then(res=>{
+          if(res.data.length!=0){
+            ElMessage({
+              message: '登录成功',
+              type: 'success'
             })
-          })
-
-        }
-        else if(res.data.length==0){
-          ElMessage({
-            message: '用户名或密码错误',
-            type: 'error'
-          })
-        }
-
-      })
+            router.push({
+              path:'/coachMain/'+res.data[0].coachId
+            })
+          }
+          else if(res.data.length==0){
+            ElMessage({
+              message: '用户名或密码错误',
+              type: 'error'
+            })
+          }
+        })
+      }else{
+        request.post("/student-entity/studentLogin/",form.value).then((res) => {
+          if(res.data.length!=0){
+            ElMessage({
+              message: '登录成功',
+              type: 'success'
+            })
+            router.push({
+              path:'/studentHome/'+res.data[0].studentId
+            })
+          }
+          else if(res.data.length==0){
+            ElMessage({
+              message: '用户名或密码错误',
+              type: 'error'
+            })
+          }
+        })
+      }
     }
-    return {
-      login,
-      form,
 
+
+      return {
+        login,
+        form,
+        userType,
+
+      }
     }
-  }
 
 })
 </script>
@@ -106,10 +130,17 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
 }
+#three{
+  position: absolute;
+  /*background-color: #2c3e50;*/
+  width: 40%;
+  top: 57%;
+  left:42.5% ;
+}
 #loginButton{
   position: absolute;
   width: 6%;
-  top: 57%;
+  top: 67%;
   left: 42%;
 }
 </style>
