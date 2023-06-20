@@ -46,7 +46,7 @@
                                 <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三实践学习</el-menu-item>
                                 <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目三理论学习</el-menu-item>
                                 <el-menu-item index="1-6" @click="onExam">考试</el-menu-item>
-                                <el-menu-item index="1-7" @click="onExamRegistration">考试报名</el-menu-item>
+                                <el-menu-item index="1-7" @click="onExamRegistration">考试</el-menu-item>
                             </el-menu-item-group>
 
 
@@ -55,7 +55,19 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main >科目三理论</el-main>
+                <el-main >
+                    <el-image :src="healthy.imageUrl" style=" height: 350px;width: 400px"></el-image>
+                    <br>
+                    <br>
+                    <el-upload
+                    action=""
+                    :http-request="upload"
+                    :show-file-list="false">
+                    <el-button class="avatar-update">上传健康证明</el-button>
+                        <br>
+
+                </el-upload>
+                  </el-main>
             </el-container>
         </el-container>
     </div>
@@ -75,23 +87,69 @@ import { useRouter} from "vue-router";
 import {reactive, ref} from "vue";
 import request from "@/request/request";
 import health from "@icon-park/vue-next/lib/icons/Health";
+import * as $store from "vue-tsc/out/shared";
+import upload from "@icon-park/vue-next/lib/icons/Upload";
+import axios from "axios";
 
 export default {
     name: "StudentsHomeView",
+    computed: {
+        upload() {
+            return upload
+        },
+
+    },
 
     data(){
 
-        return{
 
+        return{
         }
     },
     setup(){
 
+        const upload = (file) => {
+            const formData = new FormData();
+            formData.append("smfile", file.file);
+            axios
+                .post("/api/v2/upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "Authorization": "xh6KJgvlS2ZWDNps1BEk24oz6lAH3p2v",
+                    },
+                })
+                .then((res) => {
+                    console.log(res);
+                    healthy.imageUrl=res.data.data.url;
+                    console.log(healthy.imageUrl);
+                    // location.reload()
+                    // console.log("上传成功");
+                    request.post("/health-entity/updateHealty",healthy)
+                        .then(res=>{
+                            console.log(res);
+                            console.log("上传成功");
+                        })
+                        .catch(err=>{
+                            console.log(err);
+                            console.log("上传失败");
+                        })
+                });
+        };
 
         const router = new useRouter()
 
         const myPageInfo=reactive({
             userId:'',
+            healthyPictureUrl:'',
+        })
+        const healthy=reactive({
+            healthId:'',
+            height:'',
+            weight:'',
+            imageUrl:'',
+            studentId:'',
+            surgicalHistory:'',
+            allergyHistory:'',
         })
 
         const onEsc = () => {
@@ -154,7 +212,8 @@ export default {
             onExam,
             onExamRegistration,
             myPageInfo,
-
+            upload,
+            healthy
         }
     },
     methods:{
@@ -167,6 +226,17 @@ export default {
         //     console.log(res.data)
         //
         // })
+       request.get("/health-entity/getHealthyDataByStudentId/"+this.myPageInfo.userId).then(res=>{
+           console.log(res.data)
+          this.healthy.allergyHistory=res.data.allergyHistory
+           this.healthy.healthId=res.data.healthId
+           this.healthy.height=res.data.height
+           this.healthy.weight=res.data.weight
+           this.healthy.imageUrl=res.data.imageUrl
+           this.healthy.studentId=res.data.studentId
+           this.healthy.surgicalHistory=res.data.surgicalHistory
+
+       })
 
     }
 }

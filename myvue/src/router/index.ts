@@ -55,7 +55,23 @@ const router = createRouter({
       path:'/SubjectThreePractice/:userid',
       name:'SubjectThreePractice',
       component:()=> import('@/views/StudentsView/SubjectThreePracticeView.vue')
+    },
+    {
+      path:'/ExamRegistration/:userid',
+      name:'ExamRegistration',
+      component:()=> import('@/views/StudentsView/ExamRegistrationView.vue')
+    },
+    {
+      path:'/Healthy/:userid',
+      name:'Healthy',
+      component:()=> import('@/views/StudentsView/HealthyView.vue')
+    },
+    {
+      path:'/Exam/:userid',
+      name:'Exam',
+      component:()=> import('@/views/StudentsView/ExamView.vue')
     }
+
   ]
 })
 

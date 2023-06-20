@@ -3,19 +3,36 @@
         <el-container>
             <el-header>
                 <el-row :gutter="20">
-                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  />个人信息中心</el-col>
-                    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
-                    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
-                    <el-col :span="6"><div class="grid-content ep-bg-purple" />
+                    <el-col :span="6">
+                        <div class="grid-content ep-bg-purple"/>
+                        个人信息中心
+                    </el-col>
+                    <el-col :span="6">
+                        <div class="grid-content ep-bg-purple"/>
+                    </el-col>
+                    <el-col :span="6">
+                        <div class="grid-content ep-bg-purple"/>
+                    </el-col>
+                    <el-col :span="6">
+                        <div class="grid-content ep-bg-purple"/>
                         <el-dropdown>
                             <el-button type="primary">
-                                操作<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                                操作
+                                <el-icon class="el-icon--right">
+                                    <!--                                    <arrow-down/>-->
+                                </el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item> <el-button @click="onPersonInfo">个人信息中心</el-button></el-dropdown-item>
-                                    <el-dropdown-item> <el-button @click="onHealthy">绑定健康信息</el-button></el-dropdown-item>
-                                    <el-dropdown-item><el-button @click="onEsc">退出登录</el-button></el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-button @click="onPersonInfo">个人信息中心</el-button>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-button @click="onHealthy">绑定健康信息</el-button>
+                                    </el-dropdown-item>
+                                    <el-dropdown-item>
+                                        <el-button @click="onEsc">退出登录</el-button>
+                                    </el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -29,9 +46,9 @@
 
 
                     <el-menu
-                        default-active="2"
-                        class="el-menu-vertical-demo"
-                        background-color="#a6a9de"
+                            default-active="2"
+                            class="el-menu-vertical-demo"
+                            background-color="#a6a9de"
 
                     >
 
@@ -45,7 +62,8 @@
                                 <el-menu-item index="1-3" @click="OnSubjectTwo">科目二学习</el-menu-item>
                                 <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三实践学习</el-menu-item>
                                 <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目三理论学习</el-menu-item>
-                                <el-menu-item index="1-6">考试报名</el-menu-item>
+                                <el-menu-item index="1-6" @click="onExam">考试</el-menu-item>
+                                <el-menu-item index="1-7" @click="onExamRegistration">考试报名</el-menu-item>
                             </el-menu-item-group>
 
 
@@ -54,27 +72,193 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main >Main</el-main>
+                <el-main>
+                    <el-descriptions
+                            title="学生基本信息"
+                            direction="vertical"
+                            :column="4"
+
+                            border
+                            v-model="personData"
+                            width="200px"
+                    >
+
+                        <el-descriptions-item label="用户名" label-align="left" align="center"
+                                              v-model="personData.username">
+                            <template v-slot:label>
+                                <edit-name theme="outline" size="24" fill="#333"/>
+                                <label>用户名</label>
+                            </template>
+                            {{ personData.username }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="电话" label-align="left" align="center"
+                                              v-model="personData.phone">
+                            <template v-slot:label>
+                                <phone-telephone theme="outline" size="24" fill="#333"/>
+                                <label>电话</label>
+                            </template>
+                            {{ personData.phone }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="性别" label-align="left" align="center"
+                                              v-model="personData.gender">
+
+                            <template v-slot:label>
+
+                                <female v-if="personData.gender==='女'" theme="outline" size="24" fill="#333"/>
+                                <male v-if="personData.gender==='男'" theme="outline" size="24" fill="#333"/>
+                                <label>性别</label>
+                            </template>
+                            {{ personData.gender }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="驾校" label-align="left" align="center"
+                                              v-model="personData.schoolName">
+                            <template v-slot:label>
+                                <school theme="outline" size="24" fill="#333"/>
+                                <label>驾校</label>
+                            </template>
+                            <el-tag size="small">
+                                {{ personData.schoolName }}
+                            </el-tag>
+                        </el-descriptions-item>
+                        <el-descriptions-item label="教练" label-align="left" align="center"
+                                              v-model="myPageInfo.coachName">
+                            <template v-slot:label>
+                                <edit-name theme="outline" size="24" fill="#333"/>
+                                <label>教练</label>
+                            </template>
+                            {{ myPageInfo.coachName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="学生姓名" label-align="left" align="center"
+                                              v-model="personData.studentName">
+                            <template v-slot:label>
+                                <edit-name theme="outline" size="24" fill="#333"/>
+                                <label>学生姓名</label>
+                            </template>
+                            {{ personData.studentName }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="学生学习驾照类型" label-align="left" align="center"
+                                              v-model="personData.studyType">
+                            <template v-slot:label>
+                                <manual-gear theme="outline" size="24" fill="#333"/>
+                                <label> 学生学习驾照类型</label>
+                            </template>
+                            {{ personData.studyType }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="邮箱" label-align="left" align="center"
+                                              v-model="personData.email">
+                            <template v-slot:label>
+                                <accept-email theme="outline" size="24" fill="#333"/>
+                                <label>邮箱</label>
+                            </template>
+                            {{ personData.email }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="生日" label-align="left" align="center"
+                                              v-model="personData.birthday">
+                            <template v-slot:label>
+                                <birthday-cake theme="outline" size="24" fill="#333"/>
+                                <label>生日</label>
+                            </template>
+                            {{ personData.birthday }}
+                        </el-descriptions-item>
+
+                    </el-descriptions>
+
+                    <br>
+                    <div style="display: flex">
+                        <div style="flex: 1"></div>
+                        <el-button @click="onCoach">更换教练</el-button>
+                        <el-button @click="onChangePassWord">修改密码</el-button>
+                        <el-button @click="onChangePersonInfo">修改基本信息</el-button>
+                        <div style="flex: 1"></div>
+                    </div>
+
+                </el-main>
             </el-container>
         </el-container>
     </div>
+     <el-dialog v-model="changePassWordDialogVisible" title="修改密码" width="30%" center>
+       <el-form-item label="旧密码">
+            <el-input v-model="changePassWordInfo.oldPassword" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="新密码">
+            <el-input v-model="changePassWordInfo.newPassword" show-password ></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码">
+            <el-input v-model="changePassWordInfo.confirmPassword"  show-password></el-input>
+        </el-form-item>
+         <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="changePassWordDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="makeSureChangePassWordInfo">
+          修改
+        </el-button>
+      </span>
+         </template>
 
-    <dialog
-        v-model="HealthyDialogVisible"
-        title="绑定健康信息"
-        width="30%"
-        destroy-on-close
-        center
-    >
+
+     </el-dialog>
+    <el-dialog v-model="ChangePersonInfoDialogVisible" title="修改基本信息" width="30%" center>
+        <el-form-item label="用户名">
+            <el-input v-model="changeInfo.username"></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+            <el-radio-group v-model="changeInfo.gender">
+                <el-radio label="男">男</el-radio>
+                <el-radio label="女">女</el-radio>
+                <el-radio label="其他">其他</el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="电话">
+            <el-input v-model="changeInfo.phone" maxlength="11" show-word-limit type="text"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+            <el-input v-model="changeInfo.email"></el-input>
+        </el-form-item>
+        <el-form-item label="生日">
+            <el-date-picker
+                v-model="changeInfo.birthday"
+                type="date"
+                placeholder="选择你的生日"
+
+            />
+        </el-form-item>
+        <el-form-item label="学生名字">
+            <el-input v-model="changeInfo.studentName"></el-input>
+        </el-form-item>
         <template #footer>
       <span class="dialog-footer">
-        <el-button @click="HealthyDialogVisible = false">取消</el-button>
-        <el-button type="primary" >
-          提交
+        <el-button @click="ChangePersonInfoDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="makeSureChangePersonInfo">
+          修改
         </el-button>
       </span>
         </template>
-    </dialog>
+    </el-dialog>
+    <el-dialog
+       v-model="ChangeCoachDialogVisible"
+        width="30%"
+        title="重新选择教练"
+       center
+    >
+        <el-select v-model="changeInfo.coachId" class="m-2" :placeholder="myPageInfo.coachName" size="large">
+            <el-option
+                v-for="option in options.option"
+
+                :label="option.coachName"
+                :value="option.coachId"
+            />
+        </el-select>
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="ChangeCoachDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="makeSureChangeCoach">
+          修改
+        </el-button>
+      </span>
+        </template>
+    </el-dialog>
+
+
 </template>
 import { ref } from 'vue'
 import {
@@ -85,65 +269,330 @@ Setting,
 } from '@element-plus/icons-vue'
 
 <script>
-import { useRouter} from "vue-router";
+import {useRouter} from "vue-router";
 import {reactive, ref} from "vue";
 import request from "@/request/request";
-import health from "@icon-park/vue-next/lib/icons/Health";
+import {
+    ManualGear,
+    EditName,
+    BirthdayCake,
+    Male,
+    Female,
+    PhoneTelephone,
+    School,
+    AcceptEmail
+} from '@icon-park/vue-next'
+import {ElMessage} from "element-plus";
+
 
 export default {
     name: "StudentsHomeView",
-
-    data(){
-
-        return{
-
-        }
+    components: {
+        EditName,
+        PhoneTelephone,
+        School,
+        Female,
+        Male,
+        ManualGear,
+        AcceptEmail,
+        BirthdayCake,
     },
-    setup(){
-        const HealthyDialogVisible = ref(false)
+    data() {
 
+        return {}
+    },
+    setup() {
+        const ChangeCoachDialogVisible=ref(false)
+          const onChangePassWord=()=>{
+              changePassWordDialogVisible.value=true
+              request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res=>{
+                  changeInfo.password=res.data.password
+                  changeInfo.email=res.data.email
+                  changeInfo.phone=res.data.phone
+                  changeInfo.gender=res.data.gender
+                  changeInfo.username=res.data.username
+                  changeInfo.birthday=res.data.birthday
+                  changeInfo.studentName=res.data.studentName
+                  changeInfo.coachId=res.data.coachId
+                 changeInfo.practiceId=res.data.practiceId
+                  changeInfo.examId=res.data.examId
+                  changeInfo.studentId=res.data.studentId
+                  changeInfo.healthId=res.data.healthId
+                  changeInfo.schoolName=res.data.schoolName
+                  changeInfo.studyType=res.data.studyType
+
+              })
+          }
+          const  onCoach = () => {
+              ChangeCoachDialogVisible.value=true
+              request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res=>{
+                  changeInfo.password=res.data.password
+                  changeInfo.email=res.data.email
+                  changeInfo.phone=res.data.phone
+                  changeInfo.gender=res.data.gender
+                  changeInfo.username=res.data.username
+                  changeInfo.birthday=res.data.birthday
+                  changeInfo.studentName=res.data.studentName
+                  changeInfo.coachId=res.data.coachId
+                  changeInfo.practiceId=res.data.practiceId
+                  changeInfo.examId=res.data.examId
+                  changeInfo.studentId=res.data.studentId
+                  changeInfo.healthId=res.data.healthId
+                  changeInfo.schoolName=res.data.schoolName
+                  changeInfo.studyType=res.data.studyType
+
+              })
+          }
+          const makeSureChangePassWordInfo=()=>{
+             if (changePassWordInfo.oldPassword !== myPageInfo.password) {
+                  ElMessage.error('旧密码错误')
+                  return
+              }
+
+              if(changePassWordInfo.oldPassword===''||changePassWordInfo.newPassword===''||changePassWordInfo.confirmPassword===''){
+                  ElMessage.error('请填写完整信息')
+                  return
+              }
+              if(changePassWordInfo.newPassword!==changePassWordInfo.confirmPassword){
+                  ElMessage.error('两次密码不一致')
+                  return
+              }
+              changeInfo.password=changePassWordInfo.newPassword
+              request.post("/student-entity/updateStudentById",changeInfo).then(res=>{
+                  if (res.data === "1"){
+                      ElMessage.success('修改密码成功')
+                      changePassWordDialogVisible.value=false
+                      request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
+                          // console.log(res.data)
+                          personData.birthday = res.data.birthday
+                          personData.coachId = res.data.coachId
+                          personData.email = res.data.email
+                          personData.phone = res.data.phone
+                          personData.examId = res.data.examId
+                          personData.gender = res.data.gender
+                          personData.healthId = res.data.healthId
+                          personData.password = res.data.password
+                          personData.practiceId = res.data.practiceId
+                          personData.schoolName = res.data.schoolName
+                          personData.studentId = res.data.studentId
+                          personData.studentName = res.data.studentName
+                          personData.studyType = res.data.studyType
+                          personData.username = res.data.username
+                          myPageInfo.coachId = res.data.coachId
+                          myPageInfo.password=res.data.password
+                          myPageInfo.schoolName=res.data.schoolName
+                          request.get("/coach-entity/getCoachById/" + myPageInfo.coachId).then(res => {
+                              myPageInfo.coachName = res.data.coachName
+                          })
+                      })
+                  }
+
+              }).catch(err=>{
+                  ElMessage.error('修改密码失败')
+              })
+
+          }
+          const changePassWordDialogVisible=ref(false)
+
+         const  changePassWordInfo=reactive({
+            oldPassword:'',
+            newPassword:'',
+            confirmPassword:''
+         })
         const router = new useRouter()
 
-        const myPageInfo=reactive({
-            userId:'',
+        const myPageInfo = reactive({
+            userId: '',
+            coachId: '',
+            coachName: '',
+            password:'',
+            schoolName:'',
         })
 
         const onEsc = () => {
             router.push({
-                path:'/'
+                path: '/'
             })
 
         }
         const onPersonInfo = () => {
             router.push({
-                path:'/PersonInfo/'+myPageInfo.userId
+                path: '/PersonInfo/' + myPageInfo.userId
             })
 
         }
         const OnSubjectOne = () => {
             router.push({
-                path:'/SubjectOne/'+myPageInfo.userId
+                path: '/SubjectOne/' + myPageInfo.userId
             })
         }
         const OnSubjectTwo = () => {
             router.push({
-                path:'/SubjectTwo/'+myPageInfo.userId
+                path: '/SubjectTwo/' + myPageInfo.userId
             })
         }
         const onHealthy = () => {
-
+            router.push({
+                path: '/Healthy/' + myPageInfo.userId
+            })
         }
+
+
         const OnSubjectThreePractice = () => {
             router.push({
-                path:'/SubjectThreePractice/'+myPageInfo.userId
+                path: '/SubjectThreePractice/' + myPageInfo.userId
             })
         }
         const OnSubjectThreeTheory = () => {
             router.push({
-                path:'/SubjectThreeTheory/'+myPageInfo.userId
+                path: '/SubjectThreeTheory/' + myPageInfo.userId
             })
         }
-        return{
+        const onExam = () => {
+            router.push({
+                path: '/Exam/' + myPageInfo.userId
+            })
+        }
+        const onExamRegistration = () => {
+            router.push({
+                path: '/ExamRegistration/' + myPageInfo.userId
+            })
+        }
+
+        const personData = reactive({
+
+            username: '',
+            phone: '',
+            gender: '',
+            schoolName: '',
+            studentName: '',
+            studyType: '',
+            email: '',
+            birthday: '',
+            coachId: '',
+            password: '',
+            studentId: '',
+            examId: '',
+            healthId: '',
+            practiceId: '',
+
+        })
+        const ChangePersonInfoDialogVisible = ref(false)
+        const changeInfo = reactive({
+            username: '',
+            phone: '',
+            gender: '',
+            schoolName: '',
+            studentName: '',
+            studyType: '',
+            email: '',
+            birthday: '',
+            coachId: '',
+            password: '',
+            studentId: '',
+            examId: '',
+            healthId: '',
+            practiceId: '',
+
+        })
+        const makeSureChangePersonInfo=()=>{
+            if (changeInfo.username === ""){
+                ElMessage({
+                    message:"用户名不能为空",
+                    type:'error'
+                })
+                return
+            }
+            if (changeInfo.studentName === ""){
+                ElMessage({
+                    message:"学生名字不能为空",
+                    type:'error'
+                })
+                return
+            }
+            if (changeInfo.phone === "") {
+                ElMessage({
+                    message: "电话不能为空",
+                    type: 'error'
+                })
+                return
+            }
+             request.post("/student-entity/updateStudentById",changeInfo).then(res=>{
+                 if (res.data === 1){
+                     ElMessage({
+                         message:"修改成功",
+                         type:'success'
+                     })
+                      ChangePersonInfoDialogVisible.value = false
+                     request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
+                         // console.log(res.data)
+                         personData.birthday = res.data.birthday
+                         personData.coachId = res.data.coachId
+                         personData.email = res.data.email
+                         personData.phone = res.data.phone
+                         personData.examId = res.data.examId
+                         personData.gender = res.data.gender
+                         personData.healthId = res.data.healthId
+                         personData.password = res.data.password
+                         personData.practiceId = res.data.practiceId
+                         personData.schoolName = res.data.schoolName
+                         personData.studentId = res.data.studentId
+                         personData.studentName = res.data.studentName
+                         personData.studyType = res.data.studyType
+                         personData.username = res.data.username
+                         myPageInfo.coachId = res.data.coachId
+                         myPageInfo.password=res.data.password
+                         myPageInfo.schoolName=res.data.schoolName
+                         request.get("/coach-entity/getCoachById/" + myPageInfo.coachId).then(res => {
+                             myPageInfo.coachName = res.data.coachName
+                         })
+                     })
+                 }else {
+                     ElMessage({
+                         message:"修改失败",
+                         type:'error'
+                     })
+                 }
+
+             })
+        }
+        const onChangePersonInfo = () => {
+            ChangePersonInfoDialogVisible.value = true
+            changeInfo.birthday= personData.birthday
+            changeInfo.coachId= personData.coachId
+            changeInfo.gender=personData.gender
+            changeInfo.email=personData.email
+            changeInfo.phone=personData.phone
+            changeInfo.username=personData.username
+            changeInfo.studentName=personData.studentName
+            changeInfo.schoolName=personData.schoolName
+            changeInfo.studyType=personData.studyType
+            changeInfo.password=personData.password
+            changeInfo.studentId=personData.studentId
+            changeInfo.examId=personData.examId
+            changeInfo.healthId=personData.healthId
+            changeInfo.practiceId=personData.practiceId
+
+        }
+        const  options=reactive({
+            option:[{
+                coachId:'',
+                coachName:'',
+                email:'',
+                password:'',
+                phone:'',
+                gender:'',
+                type:'',
+                teachingAge:'',
+                introduction:'',
+                schoolName:'',
+            }]
+        })
+        const  makeSureChangeCoach=()=>{
+            // if ()
+        }
+        return {
+            options,
             onEsc,
             onPersonInfo,
             OnSubjectOne,
@@ -151,20 +600,58 @@ export default {
             OnSubjectThreePractice,
             OnSubjectThreeTheory,
             onHealthy,
+            onExam,
+            ChangeCoachDialogVisible,
+            onExamRegistration,
+            personData,
             myPageInfo,
-            HealthyDialogVisible,
+            onChangePersonInfo,
+            ChangePersonInfoDialogVisible,
+            changeInfo,
+            makeSureChangePersonInfo,
+            changePassWordInfo,
+            changePassWordDialogVisible,
+            makeSureChangePassWordInfo,
+            onChangePassWord,
+            onCoach,
+            makeSureChangeCoach,
         }
     },
-    methods:{
-
-    },
+    methods: {},
     created() {
-        const myRoute= new useRouter()
-        this.myPageInfo.userId =  myRoute.currentRoute.value.params.userid
-        request.get("/student-entity/selectStudentById/"+this.myPageInfo.userId).then(res=>{
-            console.log(res.data)
+        const myRoute = new useRouter()
+        this.myPageInfo.userId = myRoute.currentRoute.value.params.userid
 
+        console.log(this.options)
+        request.get("/student-entity/selectStudentById/" + this.myPageInfo.userId).then(res => {
+            // console.log(res.data)
+            this.personData.birthday = res.data.birthday
+            this.personData.coachId = res.data.coachId
+            this.personData.email = res.data.email
+            this.personData.phone = res.data.phone
+            this.personData.examId = res.data.examId
+            this.personData.gender = res.data.gender
+            this.personData.healthId = res.data.healthId
+            this.personData.password = res.data.password
+            this.personData.practiceId = res.data.practiceId
+            this.personData.schoolName = res.data.schoolName
+            this.personData.studentId = res.data.studentId
+            this.personData.studentName = res.data.studentName
+            this.personData.studyType = res.data.studyType
+            this.personData.username = res.data.username
+            this.myPageInfo.coachId = res.data.coachId
+            this.myPageInfo.password=res.data.password
+            this.myPageInfo.schoolName=res.data.schoolName
+            request.get("/coach-entity/getCoachById/" + this.myPageInfo.coachId).then(res => {
+                this.myPageInfo.coachName = res.data.coachName
+            })
+            request.get("/coach-entity/getAllCoachBySchoolName/"+this.myPageInfo.schoolName).then(res=>{
+                // console.log(res.data)
+                this.options.option=res.data
+
+            })
         })
+
 
     }
 }
@@ -173,3 +660,140 @@ export default {
 <style scoped>
 
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

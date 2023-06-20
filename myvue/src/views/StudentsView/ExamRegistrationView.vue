@@ -55,7 +55,7 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main >科目三理论</el-main>
+                <el-main >考试报名</el-main>
             </el-container>
         </el-container>
     </div>
