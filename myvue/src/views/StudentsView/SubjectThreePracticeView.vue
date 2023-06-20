@@ -87,7 +87,6 @@ export default {
     },
     setup(){
 
-
         const router = new useRouter()
 
         const myPageInfo=reactive({
