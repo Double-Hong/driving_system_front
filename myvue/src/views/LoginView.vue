@@ -58,7 +58,7 @@ export default defineComponent({
               type: 'success'
             })
             router.push({
-              path:'/adminMain/'+res.data[0].coachId
+              path:'/coachMain/'+res.data[0].coachId
             })
           }
           else if(res.data.length==0){

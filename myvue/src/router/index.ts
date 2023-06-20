@@ -1,11 +1,13 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
-import AdminMain from "@/views/AdministratorView/AdminMain.vue";
-import StudentInfo from "@/views/AdministratorView/StudentInfo.vue";
+import coachMain from "@/views/CoachView/CoachMain.vue";
+import StudentInfo from "@/views/CoachView/StudentInfo.vue";
 import StudentHome from "@/views/StudentsView/StudentsHomeView.vue";
-import AdminInfo from "@/views/AdministratorView/AdminInfo.vue";
-
+import CoachInfo from "@/views/CoachView/CoachInfo.vue";
+import ExamInfo from "@/views/CoachView/ExamInfo.vue";
+import TestQuestions from "@/views/CoachView/TestQuestions.vue";
+import Test from "@/views/CoachView/Test.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,9 +31,9 @@ const router = createRouter({
             component: LoginView
         },
         {
-            path: '/adminMain/:peopleId',
-            name: 'adminMain',
-            component: AdminMain,
+            path: '/coachMain/:peopleId',
+            name: 'coachMain',
+            component: coachMain,
             children: [
                 {
                     path: 'studentInfo',
@@ -39,9 +41,24 @@ const router = createRouter({
                     component: StudentInfo
                 },
                 {
-                    path: 'adminInfo',
-                    name: 'adminInfo',
-                    component: AdminInfo
+                    path: 'CoachInfo',
+                    name: 'CoachInfo',
+                    component: CoachInfo
+                },
+                {
+                    path: 'examInfo',
+                    name: 'examInfo',
+                    component: ExamInfo
+                },
+                {
+                    path: 'testQuestions',
+                    name: 'testQuestions',
+                    component: TestQuestions
+                },
+                {
+                    path: 'test',
+                    name: 'test',
+                    component: Test
                 }
             ]
         },
