@@ -2,26 +2,41 @@
 
 
   <div id="myHeader">
-    <h1>{{userData.personInfo.coachName}}</h1>
-    <el-button @click="goToAdminInfo" :type="buttonNow.adminInfo" style="width: 100%;position: absolute;top: 25%">
+    <h1>{{ userData.personInfo.coachName }}</h1>
+    <!--    <CoachHeadPhoto :url="userData.personInfo.headPhoto" :key="new Date().getTime()" v-show="photoVisible" />-->
+    <el-upload
+        v-model:file-list="fileList"
+        class="upload-demo"
+        :http-request="uploadHeadPhoto"
+        :limit="1"
+    >
+      <Avatar :url="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+    </el-upload>
+    <br>
+
+    <el-button @click="goToAdminInfo" :type="buttonNow.adminInfo"
+               style="width: 100%;position: absolute;top: 25%;left: 0">
       个人信息
     </el-button>
     <br>
-    <el-button @click="goToStudentInfo" :type=buttonNow.studentInfo style="width: 100%;position: absolute;top: 35%">
+    <el-button @click="goToStudentInfo" :type=buttonNow.studentInfo
+               style="width: 100%;position: absolute;top: 35%;left: 0">
       学生信息
     </el-button>
     <br>
-    <el-button @click="goToExamInfo" :type="buttonNow.examInfo" style="width: 100%;position: absolute;top:45%">
+    <el-button @click="goToExamInfo" :type="buttonNow.examInfo" style="width: 100%;position: absolute;top:45%;left: 0;">
       考试信息
     </el-button>
     <br>
-    <el-button @click="goToQuestions" :type="buttonNow.testQuestions" style="width: 100%;position: absolute;top:55%">
+    <el-button @click="goToQuestions" :type="buttonNow.testQuestions"
+               style="width: 100%;position: absolute;top:55%;left: 0">
       题目信息
-    </el-button>
+    </el-button>o
     <br>
-    <el-button @click="goToTest"  style="width: 100%;position: absolute;top: 75%">
+    <el-button @click="goToTest" style="width: 100%;position: absolute;top: 75%;left: 0">
       Test
-    </el-button>  </div>
+    </el-button>
+  </div>
 
 
   <div id="children">
@@ -30,15 +45,18 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, reactive, ref} from "vue";
+import {defineComponent, ref, reactive} from "vue";
 import router from "@/router";
 import {useRouter} from "vue-router";
 import {provide} from "vue";
 import request from "@/request/request";
+import {UploadUserFile} from "element-plus";
+import {client} from "@/utils/myoss";
+import Avatar from "@/components/Avatar.vue";
 
 export default defineComponent({
   name: "AdminMain",
-
+  components: {Avatar},
   created() {
     // const myRouter = useRouter()
     // this.pageInfo.peopleId = <string>myRouter.currentRoute.value.params.peopleId
@@ -55,6 +73,7 @@ export default defineComponent({
     const pageInfo = reactive({
       peopleId: '',
     })
+
     interface userInfo {
       coachId: string,
       coachName: string,
@@ -67,11 +86,13 @@ export default defineComponent({
       teachingAge: string,
       type: string,
       username: string,
+      headPhoto: string,
     }
 
     const userData = reactive({
       personInfo: {} as userInfo,
     })
+
     const myRouter = useRouter()
     pageInfo.peopleId = <string>myRouter.currentRoute.value.params.peopleId
     provide('peopleId', pageInfo.peopleId)
@@ -79,17 +100,12 @@ export default defineComponent({
     request.get("/coach-entity/getCoach/" + pageInfo.peopleId).then(res => {
       userData.personInfo = res.data
       goToAdminInfo()
-
     })
-
-
-
-
     const goToAdminInfo = () => {
       buttonNow.adminInfo = "primary"
       buttonNow.studentInfo = "default"
       buttonNow.examInfo = "default"
-      buttonNow.testQuestions= "default"
+      buttonNow.testQuestions = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/CoachInfo'
       })
@@ -99,27 +115,27 @@ export default defineComponent({
       buttonNow.studentInfo = "primary"
       buttonNow.adminInfo = "default"
       buttonNow.examInfo = "default"
-      buttonNow.testQuestions= "default"
+      buttonNow.testQuestions = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/studentInfo'
       })
     }
 
-    const goToExamInfo = () =>{
+    const goToExamInfo = () => {
       buttonNow.adminInfo = "default"
       buttonNow.studentInfo = "default"
       buttonNow.examInfo = "primary"
-      buttonNow.testQuestions= "default"
+      buttonNow.testQuestions = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/examInfo'
       })
     }
 
-    const goToQuestions = () =>{
+    const goToQuestions = () => {
       buttonNow.studentInfo = "default"
       buttonNow.adminInfo = "default"
       buttonNow.examInfo = "default"
-      buttonNow.testQuestions= "primary"
+      buttonNow.testQuestions = "primary"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/testQuestions'
       })
@@ -127,7 +143,7 @@ export default defineComponent({
 
     const goToTest = () => {
       router.push({
-        path: '/coachMain/' + pageInfo.peopleId +'/test'
+        path: '/coachMain/' + pageInfo.peopleId + '/test'
       })
     }
     const buttonNow = reactive({
@@ -136,6 +152,28 @@ export default defineComponent({
       examInfo: "default" as string,
       testQuestions: "default" as string,
     })
+
+    /*
+    上传头像模块
+     */
+    const photoVisible = ref(true)
+    const fileList = ref<UploadUserFile[]>([])
+    const uploadHeadPhoto = (file) => {
+      let updateHeadInfo = reactive({}) as userInfo
+      updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
+      const aliName = userData.personInfo.username + ".jpg"
+      client.put("/ourFile/" + aliName, file.file).then((res: any) => {
+        console.log(res)
+        updateHeadInfo.headPhoto = res.url
+        request.post("http://localhost:9090/coach-entity/updateCoachPhoto", updateHeadInfo).then(resp => {
+          if (resp.data == 1) {
+            console.log("上传成功")
+            router.go(0)
+            userData.personInfo.headPhoto = res.url
+          }
+        })
+      })
+    }
 
     return {
       pageInfo,
@@ -146,6 +184,9 @@ export default defineComponent({
       buttonNow,
       goToTest,
       goToQuestions,
+      fileList,
+      uploadHeadPhoto,
+      photoVisible,
     }
   }
 
@@ -160,7 +201,7 @@ export default defineComponent({
   top: 0;
   left: 0;
   background-color: aqua;
-
+  text-align: center;
 }
 
 #children {
