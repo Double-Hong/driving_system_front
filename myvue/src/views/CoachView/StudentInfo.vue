@@ -1,6 +1,6 @@
 <template>
 
-<!--  顶部栏-->
+  <!--  顶部栏-->
   <el-card class="box-card"  id="search">
     <el-row>
       <el-col :span="12">
@@ -16,7 +16,7 @@
     </el-row>
   </el-card>
 
-<!--用户信息展示列表-->
+  <!--用户信息展示列表-->
   <el-card class="box-card">
     <el-table :data="tableData.studentList" stripe style="width: 100%">
       <el-table-column prop="studentName" label="姓名" width="100"/>
@@ -48,7 +48,7 @@
   </el-card>
 
 
-<!--  对话框-->
+  <!--  对话框-->
   <el-dialog
       v-model="dialogVisible"
       :title="title"
@@ -154,12 +154,12 @@ export default defineComponent({
       XLSX.writeFile(workbook, 'data.xlsx');
     };
 
-  const dialogData = reactive({}) as studentInfo//学生类
-  const dialogVisible = ref(false)//添加对话框的可见性
-  //确认删除对话框
-  const deleteDialogVisible = ref(false)
-  const search = ref('')
-  const title = ref("")
+    const dialogData = reactive({}) as studentInfo//学生类
+    const dialogVisible = ref(false)//添加对话框的可见性
+    //确认删除对话框
+    const deleteDialogVisible = ref(false)
+    const search = ref('')
+    const title = ref("")
 
     const checkEmail = (rule, value, callback) => {
       const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;//邮箱验证的正则表达式
@@ -269,9 +269,9 @@ export default defineComponent({
     }
     //模糊查询
     const findPeople = () => {
-        axios.post("http://localhost:9090/student-entity/getStudentList/" + searchName.value).then(res => {
-          tableData.studentList = res.data.data
-        })
+      axios.post("http://localhost:9090/student-entity/getStudentList/" + searchName.value).then(res => {
+        tableData.studentList = res.data.data
+      })
     }
 
     //通过id查找
