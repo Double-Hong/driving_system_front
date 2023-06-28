@@ -3,13 +3,13 @@
         <el-container>
             <el-header>
                 <el-row :gutter="20">
-                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  />个人信息中心</el-col>
-                    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
+                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  /></el-col>
+                    <el-col :span="6"><div class="grid-content ep-bg-purple" />个人信息中心</el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" />
                         <el-dropdown>
-                            <el-button type="primary">
-                                操作<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                            <el-button type="primary" style="margin-left: 300px">
+                                操作<el-icon class="el-icon--right"></el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
@@ -70,13 +70,15 @@ Location,
 Setting,
 } from '@element-plus/icons-vue'
 
-<script>
-import { useRouter} from "vue-router";
-import {reactive, ref} from "vue";
-import request from "@/request/request";
-import health from "@icon-park/vue-next/lib/icons/Health";
+<script lang="ts">
 
-export default {
+
+import router from "@/router";
+import {defineComponent, reactive} from "vue";
+import {useRouter} from "vue-router";
+
+export default defineComponent({
+
     name: "StudentsHomeView",
 
     data(){
@@ -86,8 +88,6 @@ export default {
         }
     },
     setup(){
-
-        const router = new useRouter()
 
         const myPageInfo=reactive({
             userId:'',
@@ -168,7 +168,7 @@ export default {
         // })
 
     }
-}
+})
 </script>
 
 <style scoped>

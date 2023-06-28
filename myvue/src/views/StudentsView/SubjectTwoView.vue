@@ -3,12 +3,12 @@
         <el-container>
             <el-header>
                 <el-row :gutter="20">
-                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  />个人信息中心</el-col>
-                    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
+                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  /></el-col>
+                    <el-col :span="6"><div class="grid-content ep-bg-purple" />科目二学习</el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" />
                         <el-dropdown>
-                            <el-button type="primary">
+                            <el-button type="primary" style="margin-left: 300px">
                                 操作<el-icon class="el-icon--right"><arrow-down /></el-icon>
                             </el-button>
                             <template #dropdown>
@@ -55,7 +55,9 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main >科目二</el-main>
+                <el-main >
+                  <h1 style="margin-left: 200px"> 科目二需要上车打卡学习,请向你的教练预约学习！</h1>
+                </el-main>
             </el-container>
         </el-container>
     </div>
