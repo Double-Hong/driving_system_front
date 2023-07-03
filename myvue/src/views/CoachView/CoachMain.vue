@@ -31,7 +31,7 @@
     <el-button @click="goToQuestions" :type="buttonNow.testQuestions"
                style="width: 100%;position: absolute;top:55%;left: 0">
       题目信息
-    </el-button>o
+    </el-button>
     <br>
     <el-button @click="goToTest" style="width: 100%;position: absolute;top: 75%;left: 0">
       Test
@@ -39,7 +39,7 @@
   </div>
 
 
-  <div id="children">
+  <div id="children" style="font-family: 楷体,serif">
     <router-view/>
   </div>
 </template>
