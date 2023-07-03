@@ -47,6 +47,7 @@
 
 
                     <el-menu
+                        :default-openeds="openeds"
                             default-active="2"
                             class="el-menu-vertical-demo"
                             background-color="#a6a9de"
@@ -320,8 +321,8 @@ export default defineComponent({
                   changeInfo.birthday=res.data.birthday
                   changeInfo.studentName=res.data.studentName
                   changeInfo.coachId=res.data.coachId
-                 changeInfo.practiceId=res.data.practiceId
-                  changeInfo.examId=res.data.examId
+
+                  changeInfo.headPhoto=res.data.headPhoto
                   changeInfo.studentId=res.data.studentId
                   changeInfo.healthId=res.data.healthId
                   changeInfo.schoolName=res.data.schoolName
@@ -340,8 +341,8 @@ export default defineComponent({
                   changeInfo.birthday=res.data.birthday
                   changeInfo.studentName=res.data.studentName
                   changeInfo.coachId=res.data.coachId
-                  changeInfo.practiceId=res.data.practiceId
-                  changeInfo.examId=res.data.examId
+
+                  changeInfo.headPhoto=res.data.headPhoto
                   changeInfo.studentId=res.data.studentId
                   changeInfo.healthId=res.data.healthId
                   changeInfo.schoolName=res.data.schoolName
@@ -375,11 +376,10 @@ export default defineComponent({
                           personData.coachId = res.data.coachId
                           personData.email = res.data.email
                           personData.phone = res.data.phone
-                          personData.examId = res.data.examId
+                          personData.headPhoto = res.data.headPhoto
                           personData.gender = res.data.gender
                           personData.healthId = res.data.healthId
                           personData.password = res.data.password
-                          personData.practiceId = res.data.practiceId
                           personData.schoolName = res.data.schoolName
                           personData.studentId = res.data.studentId
                           personData.studentName = res.data.studentName
@@ -473,9 +473,8 @@ export default defineComponent({
             coachId: '',
             password: '',
             studentId: '',
-            examId: '',
+            headPhoto: '',
             healthId: '',
-            practiceId: '',
 
         })
         const ChangePersonInfoDialogVisible = ref(false)
@@ -491,9 +490,9 @@ export default defineComponent({
             coachId: '',
             password: '',
             studentId: '',
-            examId: '',
+          headPhoto: '',
             healthId: '',
-            practiceId: '',
+
 
         })
         const makeSureChangePersonInfo=()=>{
@@ -532,11 +531,10 @@ export default defineComponent({
                          personData.coachId = res.data.coachId
                          personData.email = res.data.email
                          personData.phone = res.data.phone
-                         personData.examId = res.data.examId
+                         personData.headPhoto = res.data.headPhoto
                          personData.gender = res.data.gender
                          personData.healthId = res.data.healthId
                          personData.password = res.data.password
-                         personData.practiceId = res.data.practiceId
                          personData.schoolName = res.data.schoolName
                          personData.studentId = res.data.studentId
                          personData.studentName = res.data.studentName
@@ -571,9 +569,9 @@ export default defineComponent({
             changeInfo.studyType=personData.studyType
             changeInfo.password=personData.password
             changeInfo.studentId=personData.studentId
-            changeInfo.examId=personData.examId
+            changeInfo.headPhoto=personData.headPhoto
             changeInfo.healthId=personData.healthId
-            changeInfo.practiceId=personData.practiceId
+
 
         }
 
@@ -603,11 +601,10 @@ export default defineComponent({
                 personData.coachId = res.data.coachId
                 personData.email = res.data.email
                 personData.phone = res.data.phone
-                personData.examId = res.data.examId
+                personData.headPhoto = res.data.headPhoto
                 personData.gender = res.data.gender
                 personData.healthId = res.data.healthId
                 personData.password = res.data.password
-                personData.practiceId = res.data.practiceId
                 personData.schoolName = res.data.schoolName
                 personData.studentId = res.data.studentId
                 personData.studentName = res.data.studentName
@@ -626,9 +623,11 @@ export default defineComponent({
             ElMessage.error('换绑教练失败')
           })
         }
+      const openeds=ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
         return {
             options,
             onEsc,
+            openeds,
             onPersonInfo,
             OnSubjectOne,
             OnSubjectTwo,
@@ -667,11 +666,10 @@ export default defineComponent({
       this.personData.coachId = res.data.coachId
       this.personData.email = res.data.email
       this.personData.phone = res.data.phone
-      this.personData.examId = res.data.examId
+      this.personData.headPhoto = res.data.headPhoto
       this.personData.gender = res.data.gender
       this.personData.healthId = res.data.healthId
       this.personData.password = res.data.password
-      this.personData.practiceId = res.data.practiceId
       this.personData.schoolName = res.data.schoolName
       this.personData.studentId = res.data.studentId
       this.personData.studentName = res.data.studentName

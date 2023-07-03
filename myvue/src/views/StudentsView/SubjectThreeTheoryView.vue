@@ -32,7 +32,7 @@
                             default-active="2"
                             class="el-menu-vertical-demo"
                             background-color="#a6a9de"
-
+                            :default-openeds="openeds"
                     >
 
                         <el-sub-menu index="1">
@@ -143,8 +143,10 @@ export default {
                 path:'/ExamRegistration/'+myPageInfo.userId
             })
         }
+        const openeds = ref(["1-2", "1-3", "1-4", "1-5", "1-6", "1-7"])
         return{
             onEsc,
+            openeds,
             onPersonInfo,
             OnSubjectOne,
             OnSubjectTwo,
