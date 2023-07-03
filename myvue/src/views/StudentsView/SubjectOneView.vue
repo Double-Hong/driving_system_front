@@ -58,11 +58,11 @@
                 </el-aside>
 
                 <el-main >
-                  <h1 style="margin-left: 300px">注意！</h1>
-                  <span style="margin-left: 300px">进行一定学习时长的视频学习才能获得科目一考试资格</span>
-                  <div style="display: flex">
-                    <el-row :gutter="16" style="margin-top:100px;margin-left: 400px;margin-right: 100px">
-                      <el-card style="width: 300px;height: 400px" >
+                  <h1 style="margin-left: 40%">注意！</h1>
+                  <span style="margin-left: 30%">进行一定学习时长的视频学习才能获得科目一考试资格</span>
+                  <div style="display: flex;">
+<!--                    <el-row :gutter="16" style="">-->
+                      <el-card style="margin-left:15% ;margin-top: 5%; width: 300px;height: 400px" >
                         <template #header>
                           <div class="card-header">
                             <span>视频学习</span>
@@ -71,7 +71,8 @@
                         </template>
                         <el-image src="https://www.aerohome.com.cn/images/upload/20210428/161959139469.jpg"></el-image>
                       </el-card>
-                      <el-card class="box-card"  style="margin-left: 200px;width: 300px;height: 400px">
+
+                      <el-card class="box-card"  style="width: 300px;margin-top: 5%;height: 400px;margin-left: 10%">
                         <template #header>
                           <div class="card-header">
                             <span>试题学习</span>
@@ -80,7 +81,7 @@
                         </template>
                         <el-image src="https://bpic.588ku.com/element_origin_min_pic/21/04/06/f0d082f8abaefe5e0f9ebc74f6a89f0c.jpg"></el-image>
                       </el-card>
-                    </el-row>
+<!--                    </el-row>-->
 
                   </div>
 
