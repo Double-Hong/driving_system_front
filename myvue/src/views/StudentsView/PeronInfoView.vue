@@ -5,10 +5,11 @@
                 <el-row :gutter="20">
                     <el-col :span="6">
                         <div class="grid-content ep-bg-purple"/>
-                        个人信息中心
+
                     </el-col>
                     <el-col :span="6">
                         <div class="grid-content ep-bg-purple"/>
+                      个人信息中心
                     </el-col>
                     <el-col :span="6">
                         <div class="grid-content ep-bg-purple"/>
@@ -16,10 +17,10 @@
                     <el-col :span="6">
                         <div class="grid-content ep-bg-purple"/>
                         <el-dropdown>
-                            <el-button type="primary">
+                            <el-button type="primary" style="margin-left: 300px">
                                 操作
                                 <el-icon class="el-icon--right">
-                                    <!--                                    <arrow-down/>-->
+
                                 </el-icon>
                             </el-button>
                             <template #dropdown>
@@ -46,6 +47,7 @@
 
 
                     <el-menu
+                        :default-openeds="openeds"
                             default-active="2"
                             class="el-menu-vertical-demo"
                             background-color="#a6a9de"
@@ -83,14 +85,7 @@
                             width="200px"
                     >
 
-                        <el-descriptions-item label="用户名" label-align="left" align="center"
-                                              v-model="personData.username">
-                            <template v-slot:label>
-                                <edit-name theme="outline" size="24" fill="#333"/>
-                                <label>用户名</label>
-                            </template>
-                            {{ personData.username }}
-                        </el-descriptions-item>
+
                         <el-descriptions-item label="电话" label-align="left" align="center"
                                               v-model="personData.phone">
                             <template v-slot:label>
@@ -268,10 +263,12 @@ Location,
 Setting,
 } from '@element-plus/icons-vue'
 
-<script>
+<script lang="ts">
 import {useRouter} from "vue-router";
-import {reactive, ref} from "vue";
+import {defineComponent, reactive, ref} from "vue";
 import request from "@/request/request";
+import router from "@/router";
+import {ElMessage} from "element-plus";
 import {
     ManualGear,
     EditName,
@@ -282,10 +279,12 @@ import {
     School,
     AcceptEmail
 } from '@icon-park/vue-next'
-import {ElMessage} from "element-plus";
 
 
-export default {
+
+
+export default defineComponent({
+
     name: "StudentsHomeView",
     components: {
         EditName,
@@ -298,10 +297,18 @@ export default {
         BirthdayCake,
     },
     data() {
-
         return {}
     },
     setup() {
+      const myPageInfo = reactive({
+        userId:'',
+        coachId: '',
+        coachName: '',
+        password:'',
+        schoolName:'',
+      })
+
+
         const ChangeCoachDialogVisible=ref(false)
           const onChangePassWord=()=>{
               changePassWordDialogVisible.value=true
@@ -314,8 +321,8 @@ export default {
                   changeInfo.birthday=res.data.birthday
                   changeInfo.studentName=res.data.studentName
                   changeInfo.coachId=res.data.coachId
-                 changeInfo.practiceId=res.data.practiceId
-                  changeInfo.examId=res.data.examId
+
+                  changeInfo.headPhoto=res.data.headPhoto
                   changeInfo.studentId=res.data.studentId
                   changeInfo.healthId=res.data.healthId
                   changeInfo.schoolName=res.data.schoolName
@@ -334,8 +341,8 @@ export default {
                   changeInfo.birthday=res.data.birthday
                   changeInfo.studentName=res.data.studentName
                   changeInfo.coachId=res.data.coachId
-                  changeInfo.practiceId=res.data.practiceId
-                  changeInfo.examId=res.data.examId
+
+                  changeInfo.headPhoto=res.data.headPhoto
                   changeInfo.studentId=res.data.studentId
                   changeInfo.healthId=res.data.healthId
                   changeInfo.schoolName=res.data.schoolName
@@ -369,11 +376,10 @@ export default {
                           personData.coachId = res.data.coachId
                           personData.email = res.data.email
                           personData.phone = res.data.phone
-                          personData.examId = res.data.examId
+                          personData.headPhoto = res.data.headPhoto
                           personData.gender = res.data.gender
                           personData.healthId = res.data.healthId
                           personData.password = res.data.password
-                          personData.practiceId = res.data.practiceId
                           personData.schoolName = res.data.schoolName
                           personData.studentId = res.data.studentId
                           personData.studentName = res.data.studentName
@@ -400,15 +406,9 @@ export default {
             newPassword:'',
             confirmPassword:''
          })
-        const router = new useRouter()
 
-        const myPageInfo = reactive({
-            userId: '',
-            coachId: '',
-            coachName: '',
-            password:'',
-            schoolName:'',
-        })
+
+
 
         const onEsc = () => {
             router.push({
@@ -473,9 +473,8 @@ export default {
             coachId: '',
             password: '',
             studentId: '',
-            examId: '',
+            headPhoto: '',
             healthId: '',
-            practiceId: '',
 
         })
         const ChangePersonInfoDialogVisible = ref(false)
@@ -491,9 +490,9 @@ export default {
             coachId: '',
             password: '',
             studentId: '',
-            examId: '',
+          headPhoto: '',
             healthId: '',
-            practiceId: '',
+
 
         })
         const makeSureChangePersonInfo=()=>{
@@ -518,6 +517,7 @@ export default {
                 })
                 return
             }
+
              request.post("/student-entity/updateStudentById",changeInfo).then(res=>{
                  if (res.data === 1){
                      ElMessage({
@@ -531,11 +531,10 @@ export default {
                          personData.coachId = res.data.coachId
                          personData.email = res.data.email
                          personData.phone = res.data.phone
-                         personData.examId = res.data.examId
+                         personData.headPhoto = res.data.headPhoto
                          personData.gender = res.data.gender
                          personData.healthId = res.data.healthId
                          personData.password = res.data.password
-                         personData.practiceId = res.data.practiceId
                          personData.schoolName = res.data.schoolName
                          personData.studentId = res.data.studentId
                          personData.studentName = res.data.studentName
@@ -570,11 +569,12 @@ export default {
             changeInfo.studyType=personData.studyType
             changeInfo.password=personData.password
             changeInfo.studentId=personData.studentId
-            changeInfo.examId=personData.examId
+            changeInfo.headPhoto=personData.headPhoto
             changeInfo.healthId=personData.healthId
-            changeInfo.practiceId=personData.practiceId
+
 
         }
+
         const  options=reactive({
             option:[{
                 coachId:'',
@@ -590,11 +590,44 @@ export default {
             }]
         })
         const  makeSureChangeCoach=()=>{
+          request.post("/student-entity/updateStudentById",changeInfo).then(res=>{
+            console.log(res.data)
+            if (res.data === 1){
+              ElMessage.success('换绑教练成功')
+              ChangeCoachDialogVisible.value=false
+              request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
+                // console.log(res.data)
+                personData.birthday = res.data.birthday
+                personData.coachId = res.data.coachId
+                personData.email = res.data.email
+                personData.phone = res.data.phone
+                personData.headPhoto = res.data.headPhoto
+                personData.gender = res.data.gender
+                personData.healthId = res.data.healthId
+                personData.password = res.data.password
+                personData.schoolName = res.data.schoolName
+                personData.studentId = res.data.studentId
+                personData.studentName = res.data.studentName
+                personData.studyType = res.data.studyType
+                personData.username = res.data.username
+                myPageInfo.coachId = res.data.coachId
+                myPageInfo.password=res.data.password
+                myPageInfo.schoolName=res.data.schoolName
+                request.get("/coach-entity/getCoachById/" + myPageInfo.coachId).then(res => {
+                  myPageInfo.coachName = res.data.coachName
+                })
+              })
+            }
 
+          }).catch(err=>{
+            ElMessage.error('换绑教练失败')
+          })
         }
+      const openeds=ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
         return {
             options,
             onEsc,
+            openeds,
             onPersonInfo,
             OnSubjectOne,
             OnSubjectTwo,
@@ -618,44 +651,45 @@ export default {
             makeSureChangeCoach,
         }
     },
-    methods: {},
-    created() {
-        const myRoute = new useRouter()
-        this.myPageInfo.userId = myRoute.currentRoute.value.params.userid
+    methods: {
 
-        console.log(this.options)
-        request.get("/student-entity/selectStudentById/" + this.myPageInfo.userId).then(res => {
-            // console.log(res.data)
-            this.personData.birthday = res.data.birthday
-            this.personData.coachId = res.data.coachId
-            this.personData.email = res.data.email
-            this.personData.phone = res.data.phone
-            this.personData.examId = res.data.examId
-            this.personData.gender = res.data.gender
-            this.personData.healthId = res.data.healthId
-            this.personData.password = res.data.password
-            this.personData.practiceId = res.data.practiceId
-            this.personData.schoolName = res.data.schoolName
-            this.personData.studentId = res.data.studentId
-            this.personData.studentName = res.data.studentName
-            this.personData.studyType = res.data.studyType
-            this.personData.username = res.data.username
-            this.myPageInfo.coachId = res.data.coachId
-            this.myPageInfo.password=res.data.password
-            this.myPageInfo.schoolName=res.data.schoolName
-            request.get("/coach-entity/getCoachById/" + this.myPageInfo.coachId).then(res => {
-                this.myPageInfo.coachName = res.data.coachName
-            })
-            request.get("/coach-entity/getAllCoachBySchoolName/"+this.myPageInfo.schoolName).then(res=>{
-                // console.log(res.data)
-                this.options.option=res.data
+    },
+    created(){
 
-            })
-        })
+    const myRoute =  useRouter()
+    this.myPageInfo.userId = <string>myRoute.currentRoute.value.params.userid
 
+
+    request.get("/student-entity/selectStudentById/" + this.myPageInfo.userId).then(res => {
+
+      this.personData.birthday = res.data.birthday
+      this.personData.coachId = res.data.coachId
+      this.personData.email = res.data.email
+      this.personData.phone = res.data.phone
+      this.personData.headPhoto = res.data.headPhoto
+      this.personData.gender = res.data.gender
+      this.personData.healthId = res.data.healthId
+      this.personData.password = res.data.password
+      this.personData.schoolName = res.data.schoolName
+      this.personData.studentId = res.data.studentId
+      this.personData.studentName = res.data.studentName
+      this.personData.studyType = res.data.studyType
+      this.personData.username = res.data.username
+      this.myPageInfo.coachId = res.data.coachId
+      this.myPageInfo.password=res.data.password
+      this.myPageInfo.schoolName=res.data.schoolName
+      request.get("/coach-entity/getCoachById/" + this.myPageInfo.coachId).then(res => {
+        this.myPageInfo.coachName = res.data.coachName
+      })
+      request.get("/coach-entity/getAllCoachBySchoolName/"+this.myPageInfo.schoolName).then(res=>{
+        // console.log(res.data)
+        this.options.option=res.data
+
+      })
+    })
 
     }
-}
+})
 </script>
 
 <style scoped>

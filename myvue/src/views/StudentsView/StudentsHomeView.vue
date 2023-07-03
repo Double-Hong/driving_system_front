@@ -9,7 +9,7 @@
                     <el-col :span="6"><div class="grid-content ep-bg-purple" />
                         <el-dropdown>
                             <el-button type="primary">
-                                操作<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                                操作<el-icon class="el-icon--right"></el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
@@ -32,7 +32,7 @@
                             default-active="2"
                             class="el-menu-vertical-demo"
                             background-color="#a6a9de"
-
+                            :default-openeds="opends"
                     >
 
                         <el-sub-menu index="1">
@@ -143,8 +143,10 @@ export default {
                 path:'/ExamRegistration/'+myPageInfo.userId
             })
         }
+        const opends = ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
         return{
             onEsc,
+            opends,
             onPersonInfo,
             OnSubjectOne,
             OnSubjectTwo,

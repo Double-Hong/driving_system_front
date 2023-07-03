@@ -3,13 +3,15 @@
         <el-container>
             <el-header>
                 <el-row :gutter="20">
-                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  />个人信息中心</el-col>
-                    <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
+                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  /><el-avatar :size="size" :src="circleUrl" /></el-col>
+                    <el-col :span="6"><div class="grid-content ep-bg-purple" />
+                      科目一学习
+                    </el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" />
                         <el-dropdown>
-                            <el-button type="primary">
-                                操作<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                            <el-button type="primary" style="margin-left: 300px">
+                                操作<el-icon class="el-icon--right"></el-icon>
                             </el-button>
                             <template #dropdown>
                                 <el-dropdown-menu>
@@ -24,7 +26,7 @@
                 </el-row>
             </el-header>
 
-            <el-container>
+            <el-container style="margin-top: 50px;">
                 <el-aside width="200px" style="background: #a6a9de;height: 581px">
 
 
@@ -32,7 +34,7 @@
                             default-active="2"
                             class="el-menu-vertical-demo"
                             background-color="#a6a9de"
-
+                            :default-openeds="openeds"
                     >
 
                         <el-sub-menu index="1">
@@ -55,7 +57,34 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main >科目一</el-main>
+                <el-main >
+                  <h1 style="margin-left: 300px">注意！</h1>
+                  <span style="margin-left: 300px">进行一定学习时长的视频学习才能获得科目一考试资格</span>
+                  <div style="display: flex">
+                    <el-row :gutter="16" style="margin-top:100px;margin-left: 400px;margin-right: 100px">
+                      <el-card style="width: 300px;height: 400px" >
+                        <template #header>
+                          <div class="card-header">
+                            <span>视频学习</span>
+                            <el-button class="button" style="margin-left: 90px">点击进入</el-button>
+                          </div>
+                        </template>
+                        <el-image src="https://www.aerohome.com.cn/images/upload/20210428/161959139469.jpg"></el-image>
+                      </el-card>
+                      <el-card class="box-card"  style="margin-left: 200px;width: 300px;height: 400px">
+                        <template #header>
+                          <div class="card-header">
+                            <span>试题学习</span>
+                            <el-button class="button" style="margin-left: 90px">点击进入</el-button>
+                          </div>
+                        </template>
+                        <el-image src="https://bpic.588ku.com/element_origin_min_pic/21/04/06/f0d082f8abaefe5e0f9ebc74f6a89f0c.jpg"></el-image>
+                      </el-card>
+                    </el-row>
+
+                  </div>
+
+                </el-main>
             </el-container>
         </el-container>
     </div>
@@ -86,7 +115,8 @@ export default {
         }
     },
     setup(){
-
+       const  size=ref("large")
+       const circleUrl=ref('https://tupian.qqw21.com/article/UploadPic/2021-1/20211722215532214.jpg')
 
         const router = new useRouter()
 
@@ -143,8 +173,10 @@ export default {
                 path:'/ExamRegistration/'+myPageInfo.userId
             })
         }
+        const openeds = ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
         return{
             onEsc,
+            openeds,
             onPersonInfo,
             OnSubjectOne,
             OnSubjectTwo,
@@ -154,6 +186,8 @@ export default {
             onExam,
             onExamRegistration,
             myPageInfo,
+          circleUrl,
+          size,
 
         }
     },
