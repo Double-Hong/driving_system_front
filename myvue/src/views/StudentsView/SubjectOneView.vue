@@ -2,8 +2,17 @@
     <div class="common-layout">
         <el-container>
             <el-header>
-                <el-row :gutter="20">
-                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  /><el-avatar :size="size" :src="circleUrl" /></el-col>
+                <el-row :gutter="20" style="height: 100px">
+                    <el-col :span="6"  >
+                      <el-upload
+                          v-model:file-list="fileList"
+                          class="upload-demo"
+                          :http-request="uploadHeadPhoto"
+                          :limit="1"
+                      >
+                        <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+                      </el-upload>
+                    </el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" />
                       科目一学习
                     </el-col>
@@ -45,8 +54,8 @@
                             <el-menu-item-group>
                                 <el-menu-item index="1-2" @click="OnSubjectOne">科目一学习</el-menu-item>
                                 <el-menu-item index="1-3" @click="OnSubjectTwo">科目二学习</el-menu-item>
-                                <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三实践学习</el-menu-item>
-                                <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目三理论学习</el-menu-item>
+                              <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三学习</el-menu-item>
+                              <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目四学习</el-menu-item>
                                 <el-menu-item index="1-6" @click="onExam">考试</el-menu-item>
                                 <el-menu-item index="1-7" @click="onExamRegistration">考试报名</el-menu-item>
                             </el-menu-item-group>
@@ -61,12 +70,11 @@
                   <h1 style="margin-left: 40%">注意！</h1>
                   <span style="margin-left: 30%">进行一定学习时长的视频学习才能获得科目一考试资格</span>
                   <div style="display: flex;">
-<!--                    <el-row :gutter="16" style="">-->
                       <el-card style="margin-left:15% ;margin-top: 5%; width: 300px;height: 400px" >
                         <template #header>
                           <div class="card-header">
                             <span>视频学习</span>
-                            <el-button class="button" style="margin-left: 90px">点击进入</el-button>
+                            <el-button class="button" style="margin-left: 90px" @click="onVideo">点击进入</el-button>
                           </div>
                         </template>
                         <el-image src="https://www.aerohome.com.cn/images/upload/20210428/161959139469.jpg"></el-image>
@@ -76,18 +84,17 @@
                         <template #header>
                           <div class="card-header">
                             <span>试题学习</span>
-                            <el-button class="button" style="margin-left: 90px">点击进入</el-button>
+                            <el-button class="button" style="margin-left: 90px" @click="onExamTest">点击进入</el-button>
                           </div>
                         </template>
                         <el-image src="https://bpic.588ku.com/element_origin_min_pic/21/04/06/f0d082f8abaefe5e0f9ebc74f6a89f0c.jpg"></el-image>
                       </el-card>
-<!--                    </el-row>-->
-
                   </div>
 
                 </el-main>
             </el-container>
         </el-container>
+
     </div>
 
 
@@ -100,26 +107,57 @@ Location,
 Setting,
 } from '@element-plus/icons-vue'
 
-<script>
+<script setup lang="ts">
 import { useRouter} from "vue-router";
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import request from "@/request/request";
 import health from "@icon-park/vue-next/lib/icons/Health";
+import {UploadUserFile} from "element-plus";
+import {client} from "@/utils/myoss";
+import type {student} from "../../../myInterface/entity";
+import Avatar from "@/components/Avatar.vue";
 
-export default {
-    name: "StudentsHomeView",
 
-    data(){
+const onVideo=()=>{
+  router.push({path:'/Video/'+myPageInfo.userId})
+}
+const onExamTest=()=>{
+  router.push({path:'/ExamTest/'+myPageInfo.userId})
+}
 
-        return{
+const fileList = ref<UploadUserFile[]>([])
+const uploadHeadPhoto = ( file:any) => {
+  let updateHeadInfo = reactive({}) as student
+  updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
+  const aliName = userData.personInfo.username + ".jpg"
+  client.put("/studentHead/" + aliName, file.file).then((res: any) => {
+    console.log(res)
+    updateHeadInfo.headPhoto = res.url
+    request.post("/student-entity/updateStudentById", updateHeadInfo).then(resp => {
+      if (resp.data == 1) {
+        router.go(0)
+        userData.personInfo.headPhoto = res.url
 
-        }
-    },
-    setup(){
-       const  size=ref("large")
-       const circleUrl=ref('https://tupian.qqw21.com/article/UploadPic/2021-1/20211722215532214.jpg')
+      }
+    })
+  })
+}
+const userData = reactive({
+  personInfo: {} as student,
+})
 
-        const router = new useRouter()
+      onMounted(()=>{
+        myPageInfo.userId =  <string>router.currentRoute.value.params.userid
+
+        request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
+          userData.personInfo = res.data
+
+        })
+      })
+
+
+
+        const router =  useRouter()
 
         const myPageInfo=reactive({
             userId:'',
@@ -175,36 +213,9 @@ export default {
             })
         }
         const openeds = ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
-        return{
-            onEsc,
-            openeds,
-            onPersonInfo,
-            OnSubjectOne,
-            OnSubjectTwo,
-            OnSubjectThreePractice,
-            OnSubjectThreeTheory,
-            onHealthy,
-            onExam,
-            onExamRegistration,
-            myPageInfo,
-          circleUrl,
-          size,
 
-        }
-    },
-    methods:{
 
-    },
-    created() {
-        const myRoute= new useRouter()
-        this.myPageInfo.userId =  myRoute.currentRoute.value.params.userid
-        // request.get("/student-entity/selectStudentById/"+this.myPageInfo.userId).then(res=>{
-        //     console.log(res.data)
-        //
-        // })
 
-    }
-}
 </script>
 
 <style scoped>

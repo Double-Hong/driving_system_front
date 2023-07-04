@@ -14,10 +14,13 @@
             </el-upload>
           </el-col>
           <el-col :span="6"><div class="grid-content ep-bg-purple" />
-            科目四学习
+            科目一学习
           </el-col>
-          <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
           <el-col :span="6"><div class="grid-content ep-bg-purple" />
+          {{time.AllTime}}
+            <el-button @click="onSubmitTime">完成这次视频学习</el-button>
+          </el-col>
+          <el-col :span="6">
             <el-dropdown>
               <el-button type="primary" style="margin-left: 300px">
                 操作<el-icon class="el-icon--right"></el-icon>
@@ -63,17 +66,15 @@
           </el-menu>
         </el-aside>
         <el-main >
-          <div style="display: flex;">
-            <el-card class="box-card"  style="width: 300px;margin-top: 5%;height: 400px;margin-left: 40%">
-              <template #header>
-                <div class="card-header">
-                  <span>试题学习</span>
-                  <el-button class="button" style="margin-left: 90px" @click="onExamTest">点击进入</el-button>
-                </div>
-              </template>
-              <el-image src="https://bpic.588ku.com/element_origin_min_pic/21/04/06/f0d082f8abaefe5e0f9ebc74f6a89f0c.jpg"></el-image>
-            </el-card>
+          <div style="display: flex;width: 100%;flex-flow: row wrap;">
+            <div v-for="video in VideoData.videoInfo" style="width: 33.3%;height: 100%;text-align: center">
+              <el-card style="height: 100%;width: 100%;position: relative">
+                <MyVideo  :url="video.videoUrl" :videoName="video.videoName"/>
+                <span>{{ video.videoName }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>{{ video.videoType }}</span>
+              </el-card>
+            </div>
           </div>
+
         </el-main>
       </el-container>
     </el-container>
@@ -94,11 +95,37 @@ import request from "@/request/request";
 import health from "@icon-park/vue-next/lib/icons/Health";
 import {UploadUserFile} from "element-plus";
 import {client} from "@/utils/myoss";
-import type {student} from "../../../myInterface/entity";
+import type {student, video} from "../../../myInterface/entity";
 import Avatar from "@/components/Avatar.vue";
+import MyVideo from "@/components/MyVideo.vue";
 
-const onExamTest=()=>{
-  router.push({path:'/ExamTest/'+myPageInfo.userId})
+const time=reactive({
+  AllTime:0,
+})
+onMounted(()=>{
+
+  jishiqi()
+})
+
+const onSubmitTime=()=>{
+  let minute=time.AllTime/60
+  if (minute<1){
+    minute=1
+  }
+
+  request.get("/student-condition-entity/addObjectOneTimeByStudentId/"+myPageInfo.userId+'/'+<bigint>minute).then(resp=>{
+    if(resp.data==1){
+      time.AllTime=0
+      router.push({
+        path:'/SubjectOne/'+myPageInfo.userId
+      })
+    }
+  })
+}
+function jishiqi(){
+  setInterval(()=>{
+    time.AllTime=time.AllTime+1
+  },1000)
 }
 
 const fileList = ref<UploadUserFile[]>([])
@@ -121,14 +148,20 @@ const uploadHeadPhoto = ( file:any) => {
 const userData = reactive({
   personInfo: {} as student,
 })
-
+const VideoData=reactive({
+  videoInfo:[] as video[],
+})
 onMounted(()=>{
   myPageInfo.userId =  <string>router.currentRoute.value.params.userid
 
   request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
     userData.personInfo = res.data
-
+    request.get("/video-entity/getAllVideoInfoByStudyType/"+userData.personInfo.studyType).then(res=>{
+      VideoData.videoInfo=res.data
+    })
   })
+
+
 })
 
 

@@ -1,14 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
 import coachMain from "@/views/CoachView/CoachMain.vue";
 import StudentInfo from "@/views/CoachView/StudentInfo.vue";
-import StudentHome from "@/views/StudentsView/StudentsHomeView.vue";
 import CoachInfo from "@/views/CoachView/CoachInfo.vue";
 import ExamInfo from "@/views/CoachView/ExamInfo.vue";
 import TestQuestions from "@/views/CoachView/TestQuestions.vue";
 import Test from "@/views/CoachView/Test.vue";
-import StudentsHomeView from "@/views/StudentsView/StudentsHomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,6 +104,21 @@ const router = createRouter({
       path:'/Exam/:userid',
       name:'Exam',
       component:()=> import('@/views/StudentsView/ExamView.vue')
+    },
+    {
+      path:'/Examing/:userId/:examId/:examTime',
+      name:'Examing',
+        component:()=> import('@/views/StudentsView/ExamIngView.vue')
+    },
+    {
+        path:'/ExamTest/:userId',
+        name:'ExamTest',
+        component:()=> import('@/views/StudentsView/ExamTestView.vue')
+    },
+    {
+      path:'/video/:userid',
+      name:'video',
+      component:()=> import('@/views/StudentsView/VideoView.vue')
     }
 
   ]

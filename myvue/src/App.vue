@@ -1,6 +1,8 @@
 <template>
+<div id="app">
+  <router-view/>
+</div>
 
-<router-view/>
 
 </template>
 
@@ -12,13 +14,15 @@ import LoginView from "@/views/LoginView.vue";
 </script>
 
 <style scoped>
-/*html,body{*/
-/*  width: 100%;*/
-/*  height: 100%;*/
-/*  margin: 0;*/
-/*  top: 0;*/
-/*  left: 0;*/
-/*}*/
+html,body,#app{
+  width: 100%;
+  height: 100%;
+  margin: -8px;
+  padding: 0;
+  position: fixed;
+
+
+}
 header {
   line-height: 1.5;
   max-height: 100vh;
