@@ -41,7 +41,7 @@
     <el-button @click="goToPracticeAdmin" style="width: 100%;position: absolute;top:75%;left: 0">练车申请</el-button>
     <br>
     <el-button @click="goToTest" style="width: 100%;position: absolute;top: 85%;left: 0">
-      Test
+      学时打卡
     </el-button>
   </div>
 
