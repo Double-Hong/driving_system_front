@@ -164,6 +164,12 @@ export default defineComponent({
       })
     }
 
+    const goToPracticeAdmin = ()=>{
+      router.push({
+        path:'/coachMain/'+pageInfo.peopleId + '/practiceAdmin'
+      })
+    }
+
     const goToTest = () => {
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/test'
@@ -212,6 +218,7 @@ export default defineComponent({
       uploadHeadPhoto,
       photoVisible,
       goToVideo,
+      goToPracticeAdmin,
     }
   }
 
