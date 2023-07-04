@@ -31,17 +31,22 @@
     <el-button @click="goToQuestions" :type="buttonNow.testQuestions"
                style="width: 100%;position: absolute;top:55%;left: 0">
       题目信息
-    </el-button>o
+    </el-button>
     <br>
-    <el-button @click="goToPracticeAdmin" style="width: 100%;position: absolute;top:65%;left: 0">练车申请</el-button>
+    <el-button @click="goToVideo" :type="buttonNow.studyVideo"
+               style="width: 100%;position: absolute;top: 65%;left: 0">
+      视频信息
+    </el-button>
     <br>
-    <el-button @click="goToTest" style="width: 100%;position: absolute;top: 75%;left: 0">
+    <el-button @click="goToPracticeAdmin" style="width: 100%;position: absolute;top:75%;left: 0">练车申请</el-button>
+    <br>
+    <el-button @click="goToTest" style="width: 100%;position: absolute;top: 85%;left: 0">
       Test
     </el-button>
   </div>
 
 
-  <div id="children">
+  <div id="children" style="font-family: 楷体,serif">
     <router-view/>
   </div>
 </template>
@@ -103,11 +108,13 @@ export default defineComponent({
       userData.personInfo = res.data
       goToAdminInfo()
     })
+    provide("schoolName", userData.personInfo.schoolName)
     const goToAdminInfo = () => {
       buttonNow.adminInfo = "primary"
       buttonNow.studentInfo = "default"
       buttonNow.examInfo = "default"
       buttonNow.testQuestions = "default"
+      buttonNow.studyVideo = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/CoachInfo'
       })
@@ -118,6 +125,7 @@ export default defineComponent({
       buttonNow.adminInfo = "default"
       buttonNow.examInfo = "default"
       buttonNow.testQuestions = "default"
+      buttonNow.studyVideo = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/studentInfo'
       })
@@ -128,6 +136,7 @@ export default defineComponent({
       buttonNow.studentInfo = "default"
       buttonNow.examInfo = "primary"
       buttonNow.testQuestions = "default"
+      buttonNow.studyVideo = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/examInfo'
       })
@@ -138,14 +147,20 @@ export default defineComponent({
       buttonNow.adminInfo = "default"
       buttonNow.examInfo = "default"
       buttonNow.testQuestions = "primary"
+      buttonNow.studyVideo = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/testQuestions'
       })
     }
 
-    const goToPracticeAdmin = ()=>{
+    const goToVideo = () => {
+      buttonNow.studentInfo = "default"
+      buttonNow.adminInfo = "default"
+      buttonNow.examInfo = "default"
+      buttonNow.testQuestions = "default"
+      buttonNow.studyVideo = "primary"
       router.push({
-        path: '/coachMain/' + pageInfo.peopleId + '/practiceAdmin'
+        path: '/coachMain/' + pageInfo.peopleId + '/studyVideo'
       })
     }
 
@@ -159,6 +174,7 @@ export default defineComponent({
       studentInfo: "default" as string,
       examInfo: "default" as string,
       testQuestions: "default" as string,
+      studyVideo: "default" as string,
     })
 
     /*
@@ -195,7 +211,7 @@ export default defineComponent({
       fileList,
       uploadHeadPhoto,
       photoVisible,
-      goToPracticeAdmin,
+      goToVideo,
     }
   }
 

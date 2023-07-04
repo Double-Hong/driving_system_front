@@ -1,5 +1,5 @@
 <template>
-  <h1>试题管理</h1>
+  <h1 style="text-align: center">试题管理</h1>
   <el-button style="position: absolute;left: 30%;top: 6.5%;" v-show="!mainVisible" @click="mainVisible=true">选择题
   </el-button>
   <el-button style="position: absolute;left: 65%;top: 6.5%;" v-show="mainVisible" @click="mainVisible=false">填空题
@@ -19,8 +19,8 @@
       <el-table-column prop="correctAnswer" label="正确答案"/>
       <el-table-column>
         <template #default="scope">
-          <el-button @click="editChoiceView(scope.row)">编辑</el-button>
-          <el-button type="danger" @click="deleteChoiceView(scope.row)">删除</el-button>
+          <el-button @click="editChoiceView(scope.row)" icon="Edit"></el-button>
+          <el-button type="danger" @click="deleteChoiceView(scope.row)" icon="Delete"></el-button>
         </template>
         <template #header>
           <el-button @click="addChoiceView">新增选择题</el-button>
@@ -39,8 +39,8 @@
       <el-table-column prop="correctAnswer" label="正确答案" width="500"/>
       <el-table-column>
         <template #default="scope">
-          <el-button @click="editBlankView(scope.row)">编辑</el-button>
-          <el-button type="danger" @click="deleteBlankView(scope.row)">删除</el-button>
+          <el-button @click="editBlankView(scope.row)" icon="Edit">编辑</el-button>
+          <el-button type="danger" @click="deleteBlankView(scope.row)" icon="Delete"></el-button>
         </template>
         <template #header>
           <el-button @click="addBlankView">新增填空题</el-button>
@@ -53,7 +53,9 @@
   <el-dialog
       title="新增选择题"
       width="30%"
-      v-model="addChoiceVisible">
+      v-model="addChoiceVisible"
+      style="text-align: center"
+  >
     <el-form label-width="100">
       <el-form-item label="题目">
         <el-input v-model="addChoiceData.multipleChoiceDescribe" clearable/>

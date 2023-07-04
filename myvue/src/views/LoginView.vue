@@ -1,7 +1,8 @@
 <template>
 
   <div id="main">
-
+    <br><br><br><br><br><br>
+    <h1 style="text-align: center;font-family: 楷体,serif">驾 校 报 名 系 统</h1>
     <div id="one">
       <me id="icon1" theme="outline" size="40" fill="#333" :strokeWidth="2" strokeLinecap="butt"/>
       <el-input style="width: 20%" v-model="form.username" clearable maxlength="20" show-word-limit></el-input>

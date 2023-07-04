@@ -5,9 +5,8 @@
   <div style="position: absolute;background-color: black;width: 100%;height: 2px;top: 17%"></div>
   <div id="personInfo" style="background-color: white;text-align: center">
 
-    <el-descriptions :border="true" :column="2" size="large" title="简介">
+    <el-descriptions :border="true" :column="2" size="large" title="简介" style="font-size: 1.5em">
       <template v-slot:title>
-
 
 
         <div style="text-align: center;width: 100%;position: absolute;">
@@ -25,21 +24,22 @@
           <!--          <br>-->
           <div style="text-align: center">
             <worker theme="outline" style="position: absolute;" size="28" fill="#333" :strokeWidth="2"/>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>姓名</label>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">姓名</label>
           </div>
 
         </template>
-        {{ userData.personInfo.coachName }}
+        <span style="font-size: 1.5em">{{ userData.personInfo.coachName }}</span>
       </el-descriptions-item>
       <el-descriptions-item label="登录名" width="100px">
         <template v-slot:label>
           <div style="text-align: center">
-            <me style="position: absolute;" theme="outline" size="28" fill="#333" strokeLinecap="butt" :strokeWidth="2"/>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>登录名</label>
+            <me style="position: absolute;" theme="outline" size="28" fill="#333" strokeLinecap="butt"
+                :strokeWidth="2"/>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">登录名</label>
           </div>
 
         </template>
-        {{ userData.personInfo.username }}
+        <span style="font-size: 1.5em">{{ userData.personInfo.username }}</span>
       </el-descriptions-item>
       <el-descriptions-item label="性别">
         <template v-slot:label>
@@ -51,50 +51,59 @@
                     :strokeWidth="2"
                     fill="#333"/>
             <help v-else theme="outline" style="position: absolute;" size="28" fill="#333" :strokeWidth="2"/>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>性别</label>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">性别</label>
           </div>
         </template>
-        <el-tag>{{ userData.personInfo.gender }}</el-tag>
+        <el-tag style="font-size: 1.5em">{{ userData.personInfo.gender }}</el-tag>
       </el-descriptions-item>
       <el-descriptions-item label="电话">
         <template v-slot:label>
           <div style="text-align: center">
             <phone-telephone style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>电话</label>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">电话</label>
           </div>
 
         </template>
-        {{ userData.personInfo.phone }}
+        <span style="font-size: 1.5em">{{ userData.personInfo.phone }}</span>
       </el-descriptions-item>
       <el-descriptions-item label="邮箱">
         <template v-slot:label>
           <div style="text-align: center">
             <mail style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>邮箱</label>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">邮箱</label>
           </div>
 
         </template>
-        {{ userData.personInfo.email }}
+        <span style="font-size: 1.5em">{{ userData.personInfo.email }}</span>
       </el-descriptions-item>
       <el-descriptions-item label="教龄">
         <template v-slot:label>
           <div style="text-align: center">
             <classroom style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>教龄</label>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">教龄</label>
           </div>
 
         </template>
-        {{ userData.personInfo.teachingAge }}年
+        <span style="font-size: 1.5em">{{ userData.personInfo.teachingAge }}年</span>
       </el-descriptions-item>
       <el-descriptions-item label="类型" label-class-name="typeLabel">
         <template v-slot:label>
           <div style="text-align: center">
             <all-application style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>类型</label>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">类型</label>
           </div>
 
         </template>
-        {{ userData.personInfo.type }}
+        <span style="font-size: 1.5em">{{ userData.personInfo.type }}</span>
+      </el-descriptions-item>
+      <el-descriptions-item label="所属驾校" label-class-name="typeLabel">
+        <template v-slot:label>
+          <div style="text-align: center">
+            <school style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">所属驾校</label>
+          </div>
+        </template>
+        <span style="font-size: 1.5em">{{ userData.personInfo.schoolName }}</span>
       </el-descriptions-item>
 
     </el-descriptions>
@@ -103,14 +112,14 @@
       <template #header>
         <div class="card-header">
           <align-text-center-one style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
-          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span>个人介绍</span>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span style="font-size: 1.5em">个人介绍</span>
           <el-button style="position: absolute;right: 5%" @click="editIntroduction">
             <edit theme="outline" size="28" fill="#333" :strokeWidth="2"/>
           </el-button>
         </div>
       </template>
       <div>
-        <p>{{ userData.personInfo.introduction }}</p>
+        <p style="font-size: 1.3em">{{ userData.personInfo.introduction }}</p>
       </div>
     </el-card>
 
@@ -184,6 +193,7 @@ import {
   Help,
   Setting,
   Edit,
+  School,
 } from "@icon-park/vue-next";
 import {ElMessage} from "element-plus";
 
