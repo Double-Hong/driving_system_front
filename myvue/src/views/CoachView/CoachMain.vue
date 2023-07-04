@@ -33,6 +33,8 @@
       题目信息
     </el-button>o
     <br>
+    <el-button @click="goToPracticeAdmin" style="width: 100%;position: absolute;top:65%;left: 0">练车申请</el-button>
+    <br>
     <el-button @click="goToTest" style="width: 100%;position: absolute;top: 75%;left: 0">
       Test
     </el-button>
@@ -141,6 +143,12 @@ export default defineComponent({
       })
     }
 
+    const goToPracticeAdmin = ()=>{
+      router.push({
+        path: '/coachMain/' + pageInfo.peopleId + '/practiceAdmin'
+      })
+    }
+
     const goToTest = () => {
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/test'
@@ -187,6 +195,7 @@ export default defineComponent({
       fileList,
       uploadHeadPhoto,
       photoVisible,
+      goToPracticeAdmin,
     }
   }
 
