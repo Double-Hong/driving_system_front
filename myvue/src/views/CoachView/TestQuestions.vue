@@ -53,7 +53,9 @@
   <el-dialog
       title="新增选择题"
       width="30%"
-      v-model="addChoiceVisible">
+      v-model="addChoiceVisible"
+      style="text-align: center"
+  >
     <el-form label-width="100">
       <el-form-item label="题目">
         <el-input v-model="addChoiceData.multipleChoiceDescribe" clearable/>

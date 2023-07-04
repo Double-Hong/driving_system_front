@@ -1,10 +1,17 @@
 <template>
   <h1 style="text-align: center">考试管理</h1>
-  <el-table :data="tableData" style="width: 100%">
+  <!--  给下面这个表格的表头添加颜色-->
+
+  <el-table :data="tableData" style="width: 100%;"
+            :header-cell-style="{background: '#409EFF', color: '#fff' }"
+
+  >
     <el-table-column prop="examinationName" label="考试名"/>
     <el-table-column prop="examinationOpenTime" label="开始时间"/>
     <el-table-column prop="examinationCloseTime" label="结束时间"/>
     <el-table-column prop="examinationTime" label="考试时间"/>
+    <el-table-column prop="examinationSubject" label="考试科目"/>
+    <el-table-column prop="examinationType" label="考试类型"/>
     <el-table-column prop="examinationAddress" label="考试地点"/>
     <el-table-column width="450">
       <template #header>
@@ -62,6 +69,12 @@
       <el-form-item label="考试时间">
         <el-input v-model="addExamData.examinationTime"/>
       </el-form-item>
+      <el-form-item label="考试科目">
+        <el-input v-model="addExamData.examinationSubject" />
+      </el-form-item>
+      <el-form-item label="考试类型">
+        <el-input v-model="addExamData.examinationType" />
+      </el-form-item>
       <el-form-item label="考场位置">
         <el-input v-model="addExamData.examinationAddress"/>
       </el-form-item>
@@ -95,6 +108,12 @@
       </el-form-item>
       <el-form-item label="考试时间">
         <el-input v-model="editData.edit.examinationTime"/>
+      </el-form-item>
+      <el-form-item label="考试科目">
+        <el-input v-model="editData.edit.examinationSubject" />
+      </el-form-item>
+      <el-form-item label="考试类型">
+        <el-input v-model="editData.edit.examinationType" />
       </el-form-item>
       <el-form-item label="考场位置">
         <el-input v-model="editData.edit.examinationAddress"/>
@@ -228,7 +247,13 @@
     <h1 v-else>当前无人报名</h1>
     <el-table :data="examRecordsViewList">
       <el-table-column prop="studentName" label="学生"/>
-      <el-table-column prop="score" label="成绩"/>
+
+      <el-table-column prop="score" label="成绩">
+        <template #default="{row}">
+          <span v-if="row.score!=-1">{{ row.score }}</span>
+          <span v-else>考试未开始</span>
+        </template>
+      </el-table-column>
     </el-table>
   </el-dialog>
 
@@ -410,6 +435,9 @@ const addExam = () => {
   addExamData.examinationName = ''
   addExamData.examinationOpenTime = ''
   addExamData.examinationCloseTime = ''
+  addExamData.examinationType = ''
+  addExamData.examinationSubject = ''
+  addExamData.examinationAddress = ''
   addExamData.organizationId = pageInfo.orgId
   addExamVisible.value = true
 }

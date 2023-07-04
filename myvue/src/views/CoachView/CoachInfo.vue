@@ -9,7 +9,6 @@
       <template v-slot:title>
 
 
-
         <div style="text-align: center;width: 100%;position: absolute;">
           简介
           <el-button @click="editInfo" style="position: absolute;right: 5%">
@@ -34,14 +33,13 @@
       <el-descriptions-item label="登录名" width="100px">
         <template v-slot:label>
           <div style="text-align: center">
-            <me style="position: absolute;" theme="outline" size="28" fill="#333" strokeLinecap="butt" :strokeWidth="2"/>
+            <me style="position: absolute;" theme="outline" size="28" fill="#333" strokeLinecap="butt"
+                :strokeWidth="2"/>
             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">登录名</label>
           </div>
 
         </template>
-        <span style="font-size: 1.5em">{{ userData.personInfo.coachName }}</span>
-
-        {{ userData.personInfo.username }}
+        <span style="font-size: 1.5em">{{ userData.personInfo.username }}</span>
       </el-descriptions-item>
       <el-descriptions-item label="性别">
         <template v-slot:label>
@@ -98,6 +96,15 @@
         </template>
         <span style="font-size: 1.5em">{{ userData.personInfo.type }}</span>
       </el-descriptions-item>
+      <el-descriptions-item label="所属驾校" label-class-name="typeLabel">
+        <template v-slot:label>
+          <div style="text-align: center">
+            <school style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label style="font-size: 1.5em">所属驾校</label>
+          </div>
+        </template>
+        <span style="font-size: 1.5em">{{ userData.personInfo.schoolName }}</span>
+      </el-descriptions-item>
 
     </el-descriptions>
     <br><br><br>
@@ -105,14 +112,14 @@
       <template #header>
         <div class="card-header">
           <align-text-center-one style="position: absolute;" theme="outline" size="28" fill="#333" :strokeWidth="2"/>
-          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span  style="font-size: 1.5em">个人介绍</span>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <span style="font-size: 1.5em">个人介绍</span>
           <el-button style="position: absolute;right: 5%" @click="editIntroduction">
             <edit theme="outline" size="28" fill="#333" :strokeWidth="2"/>
           </el-button>
         </div>
       </template>
       <div>
-        <p  style="font-size: 1.3em">{{ userData.personInfo.introduction }}</p>
+        <p style="font-size: 1.3em">{{ userData.personInfo.introduction }}</p>
       </div>
     </el-card>
 
@@ -186,6 +193,7 @@ import {
   Help,
   Setting,
   Edit,
+  School,
 } from "@icon-park/vue-next";
 import {ElMessage} from "element-plus";
 

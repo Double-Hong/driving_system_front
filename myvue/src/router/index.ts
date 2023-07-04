@@ -9,6 +9,7 @@ import ExamInfo from "@/views/CoachView/ExamInfo.vue";
 import TestQuestions from "@/views/CoachView/TestQuestions.vue";
 import Test from "@/views/CoachView/Test.vue";
 import StudentsHomeView from "@/views/StudentsView/StudentsHomeView.vue";
+import StudyVideo from "@/views/CoachView/StudyVideo.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,11 @@ const router = createRouter({
           path: 'testQuestions',
           name: 'testQuestions',
           component: TestQuestions
+        },
+        {
+            path: 'studyVideo',
+            name: 'studyVideo',
+            component: StudyVideo
         },
         {
           path: 'test',
