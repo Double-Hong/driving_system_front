@@ -136,7 +136,7 @@ watch(
 const updateVisibleData = (data: studentInfo[]) => {
   visibleData.length = 0
   data.forEach((item: studentInfo) => {
-    if (item.applicationState !== 1) {
+    if (item.applicationState == 0) {
       visibleData.push(item)
     }
   })
