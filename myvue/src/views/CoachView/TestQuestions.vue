@@ -2,8 +2,8 @@
   <h1 style="text-align: center">试题管理</h1>
   <el-button style="position: absolute;left: 30%;top: 6.5%;" v-show="!mainVisible" @click="mainVisible=true">选择题
   </el-button>
-<!--  <el-button style="position: absolute;left: 65%;top: 6.5%;" v-show="mainVisible" @click="mainVisible=false">填空题-->
-<!--  </el-button>-->
+  <!--  <el-button style="position: absolute;left: 65%;top: 6.5%;" v-show="mainVisible" @click="mainVisible=false">填空题-->
+  <!--  </el-button>-->
   <div v-show="mainVisible">
     <el-input style="position: absolute;left: 3%;top: 7%;width: 200px" v-model="choiceSearch"
               placeholder="在题库中搜寻选择题" clearable></el-input>
@@ -17,9 +17,10 @@
       <el-table-column prop="option3" label="C"/>
       <el-table-column prop="option4" label="D"/>
       <el-table-column prop="correctAnswer" label="正确答案"/>
-      <el-table-column>
+      <el-table-column width="200px">
         <template #default="scope">
-          <el-button @click="editChoiceView(scope.row)" icon="Edit"></el-button>
+          <el-button @click="openEditChoicePhoto(scope.row)" icon="Search"></el-button>
+          <el-button type="info" @click="editChoiceView(scope.row)" icon="Edit"></el-button>
           <el-button type="danger" @click="deleteChoiceView(scope.row)" icon="Delete"></el-button>
         </template>
         <template #header>
@@ -147,9 +148,34 @@
       <el-form-item label="正确答案">
         <el-input v-model="editChoiceData.correctAnswer" clearable/>
       </el-form-item>
+
+      <br><br><br>
       <el-button @click="makeSureEditChoice">确认</el-button>
       <el-button @click="editChoiceVisible=false">取消</el-button>
     </el-form>
+  </el-dialog>
+
+  <!--  查看、修改图片-->
+  <el-dialog
+      title="查看图片"
+      width="50%"
+      v-model="editChoicePhotoVisible"
+      style="text-align: center"
+  >
+    <h1 v-if="editChoiceData.photoUrl==''">暂无图片</h1>
+    <el-image v-else :src="editChoiceData.photoUrl">
+    </el-image>
+
+    <el-upload
+        v-model:file-list="fileList"
+        class="upload-demo"
+        :http-request="uploadPhoto"
+        :limit="1"
+    >
+      <br><br><br><br><br>
+      <el-button>更换图片</el-button>
+    </el-upload>
+
   </el-dialog>
   <!--  填空题-->
   <el-dialog
@@ -176,7 +202,8 @@
 import {defineComponent, reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import axios from "axios";
-import {ElMessage} from "element-plus";
+import {ElMessage, UploadUserFile} from "element-plus";
+import {client} from "@/utils/myoss";
 
 export default defineComponent({
   name: "TestQuestions",
@@ -206,6 +233,7 @@ export default defineComponent({
       option3: string,
       option4: string,
       correctAnswer: string,
+      photoUrl: string,
     }
 
     interface blankData {
@@ -222,6 +250,7 @@ export default defineComponent({
       option3: '',
       option4: '',
       correctAnswer: '',
+      photoUrl: '',
     }])
     const allBlankData = ref([{
       blankTopicId: '',
@@ -239,6 +268,7 @@ export default defineComponent({
       option3: '',
       option4: '',
       correctAnswer: '',
+      photoUrl: '',
     })
     const addBlankData = ref({
       blankTopicId: '',
@@ -291,12 +321,14 @@ export default defineComponent({
     const deleteChoiceVisible = ref(false)
     const deleteBlankVisible = ref(false)
     const deleteChoiceId = ref('')
+    const deleteChoiceUrl = ref('')
     const deleteChoiceName = ref('')
     const deleteBlankId = ref('')
     const deleteBlankName = ref('')
     const deleteChoiceView = (row: choiceData) => {
       deleteChoiceId.value = row.multipleChoiceId
       deleteChoiceName.value = row.multipleChoiceDescribe
+      deleteChoiceUrl.value = row.photoUrl
       deleteChoiceVisible.value = true
     }
     const deleteBlankView = (row: blankData) => {
@@ -314,6 +346,11 @@ export default defineComponent({
           })
           allChoiceData.value = res.data
           deleteChoiceVisible.value = false
+        }
+        if (deleteChoiceUrl.value != '') {
+          client.delete("/questionPhoto/" + deleteChoiceId.value+'.jpg').then(res => {
+            console.log(res)
+          })
         }
       })
     }
@@ -339,6 +376,7 @@ export default defineComponent({
       option3: '',
       option4: '',
       correctAnswer: '',
+      photoUrl: '',
     })
     const editBlankData = ref({
       blankTopicId: '',
@@ -354,6 +392,7 @@ export default defineComponent({
       editChoiceData.value.option3 = row.option3
       editChoiceData.value.option4 = row.option4
       editChoiceData.value.correctAnswer = row.correctAnswer
+      editChoiceData.value.photoUrl = row.photoUrl
       editChoiceVisible.value = true
       console.log(row)
     }
@@ -415,6 +454,42 @@ export default defineComponent({
         })
       }
     }
+
+    //查看编辑图片
+    const editChoicePhotoVisible = ref(false)
+    const openEditChoicePhoto = (row: choiceData) => {
+      editChoiceData.value.multipleChoiceId = row.multipleChoiceId
+      editChoiceData.value.multipleChoiceDescribe = row.multipleChoiceDescribe
+      editChoiceData.value.option1 = row.option1
+      editChoiceData.value.option2 = row.option2
+      editChoiceData.value.option3 = row.option3
+      editChoiceData.value.option4 = row.option4
+      editChoiceData.value.correctAnswer = row.correctAnswer
+      editChoiceData.value.photoUrl = row.photoUrl
+      fileList.value = []
+      editChoicePhotoVisible.value = true
+    }
+
+    const fileList = ref<UploadUserFile[]>([])
+    const uploadPhoto = (file: any) => {
+      const aliName = editChoiceData.value.multipleChoiceId + '.jpg'
+      client.put("/questionPhoto/"+aliName,file.file).then((res:any)=>{
+        console.log(res)
+        editChoiceData.value.photoUrl=res.url
+        axios.post("http://localhost:9090/multiple-choice-entity/editChoiceById", editChoiceData.value).then(resp => {
+          if (resp.data != null) {
+            ElMessage({
+              showClose: true,
+              message: '更换成功',
+              type: 'success',
+            })
+            allChoiceData.value.splice(0,allChoiceData.value.length)
+            allChoiceData.value.push(...resp.data)
+            editChoicePhotoVisible.value = false
+          }
+        })
+      })
+    }
     return {
       pageInfo,
       allChoiceData,
@@ -450,6 +525,10 @@ export default defineComponent({
       blankSearch,
       searchChoice,
       searchBlank,
+      editChoicePhotoVisible,
+      openEditChoicePhoto,
+      fileList,
+      uploadPhoto,
     }
   }
 })

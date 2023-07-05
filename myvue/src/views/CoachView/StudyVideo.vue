@@ -77,6 +77,7 @@ import {ElMessage, UploadUserFile} from "element-plus";
 import {client} from "@/utils/myoss";
 import MyVideo from "@/components/MyVideo.vue";
 import router from "@/router";
+import {indexOf} from "lodash";
 
 interface Video {
   videoId: string,
@@ -129,10 +130,11 @@ const uploadVideo = (file) => {
     console.log(res)
     updateVideo.videoUrl = res.url
     updateVideo.schoolName = coachInfo.schoolName
+    videoInfoList.push(updateVideo)
     request.post("/video-entity/addVideo", updateVideo).then(resp => {
       ElMessage.success("上传成功")
-      videoInfoList.splice(0, videoInfoList.length)
-      videoInfoList.push(...resp.data)
+      // videoInfoList.splice(0, videoInfoList.length)
+      // videoInfoList.push(...resp.data)
       updateVideo.videoName = ""
       updateVideo.videoType = ""
       fileList.value = []
@@ -158,8 +160,9 @@ const openDeleteDialog = (video:Video) => {
 const deleteVideo = () => {
   request.get("/video-entity/deleteVideo/" + deleteVideoEntity.videoId).then(res => {
     ElMessage.success("删除成功")
-    videoInfoList.splice(0, videoInfoList.length)
-    videoInfoList.push(...res.data)
+    videoInfoList.splice(indexOf(videoInfoList,deleteVideoEntity),1)
+    // videoInfoList.splice(0, videoInfoList.length)
+    // videoInfoList.push(...res.data)
   })
   client.delete("/video/" + coachInfo.schoolName + "/" + deleteVideoEntity.videoName + ".mp4").then(res => {
     console.log(res)

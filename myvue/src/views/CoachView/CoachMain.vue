@@ -10,7 +10,7 @@
         :http-request="uploadHeadPhoto"
         :limit="1"
     >
-      <Avatar :url="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+      <Avatar :url="userData.personInfo.headPhoto" :key="new Date().getTime()"/>
     </el-upload>
     <br>
 
@@ -44,7 +44,8 @@
       学时打卡
     </el-button>
     <br>
-    <el-button @click="goToStudentCondition" style="position: absolute;width: 100%;top: 95%;left: 0">学员学习进度</el-button>
+    <el-button @click="goToStudentCondition" style="position: absolute;width: 100%;top: 95%;left: 0">学员学习进度
+    </el-button>
   </div>
 
 
@@ -166,9 +167,9 @@ export default defineComponent({
       })
     }
 
-    const goToPracticeAdmin = ()=>{
+    const goToPracticeAdmin = () => {
       router.push({
-        path:'/coachMain/'+pageInfo.peopleId + '/practiceAdmin'
+        path: '/coachMain/' + pageInfo.peopleId + '/practiceAdmin'
       })
     }
 
@@ -178,9 +179,9 @@ export default defineComponent({
       })
     }
 
-    const goToStudentCondition = ()=>{
+    const goToStudentCondition = () => {
       router.push({
-        path:'/coachMain/'+pageInfo.peopleId + '/studentCondition'
+        path: '/coachMain/' + pageInfo.peopleId + '/studentCondition'
       })
     }
     const buttonNow = reactive({
@@ -196,7 +197,7 @@ export default defineComponent({
      */
     const photoVisible = ref(true)
     const fileList = ref<UploadUserFile[]>([])
-    const uploadHeadPhoto = ( file:any) => {
+    const uploadHeadPhoto = (file: any) => {
       let updateHeadInfo = reactive({}) as userInfo
       updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
       const aliName = userData.personInfo.username + ".jpg"
