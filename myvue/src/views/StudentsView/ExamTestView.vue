@@ -1,4 +1,5 @@
 <template>
+  <el-scrollbar>
   <div style="background: #d2d0d0;display: flow;height: 100%">
   <el-container class="el-container">
     <el-header>
@@ -69,16 +70,17 @@
       </el-aside>
       <el-main style="margin-left: 5%; display: flex ">
         <el-card   style="width: 70%">
-          <div v-for="(item,index) in examData.examMultipleChoice" style="margin-left: 30%">
-            <el-card style="text-align: left;height: 50px;width: 70% ">{{index+1}}:{{ item.multipleChoiceDescribe }} </el-card>
-            <el-radio-group v-model="item.answer" size="large" style="margin: auto ">
+          <el-card v-for="(item,index) in examData.examMultipleChoice" style="margin-left: 10%;margin-right: 10%;margin: 5%">
+            <el-card style="text-align: left;height: 50px;width: 70% ;margin: 5% ">{{index+1}}:{{ item.multipleChoiceDescribe }} </el-card>
+            <el-image :src="item.photoUrl" style="height: 30%;width: 30%;margin-left: 5%"></el-image><br>
+            <el-radio-group v-model="item.answer" size="large" style="margin: 5% ">
               <el-radio :label="item.option1" style="">{{ item.option1 }}</el-radio>
               <el-radio :label="item.option2">{{ item.option2 }}</el-radio>
               <el-radio :label="item.option3">{{ item.option3 }}</el-radio>
               <el-radio :label="item.option4">{{ item.option4 }}</el-radio>
             </el-radio-group>
             <el-card v-if="flag">正确答案：{{item.correctAnswer}}</el-card>
-          </div>
+          </el-card>
 
         </el-card>
         <el-card  style="margin-left: 10%;width: 15%;background: #e7dada">
@@ -89,6 +91,7 @@
     </el-container>
   </el-container>
   </div>
+  </el-scrollbar>
 </template>
 
 

@@ -94,7 +94,7 @@ export interface examingMultipleChoice {
     option2: string
     option3: string
     option4: string
-
+    photoUrl: string
 }
 export interface video {
     schoolName: string
