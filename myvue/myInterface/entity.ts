@@ -3,7 +3,7 @@
 
 export interface practiceApplication{
 
-    applicationState:string
+    applicationState:number
     coachId:string
     practiceDatetime:string
     practiceId:string

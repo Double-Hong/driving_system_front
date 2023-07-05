@@ -422,7 +422,7 @@ const addOrder=()=>{
   addDialogVisible.value=true
   addPracticeApplicationData.addInfo.practiceDatetime=''
   addPracticeApplicationData.addInfo.practiceType='科目三'
-  addPracticeApplicationData.addInfo.applicationState="false"
+  addPracticeApplicationData.addInfo.applicationState=0
   addPracticeApplicationData.addInfo.coachId=studentData.studentInfo.coachId
   addPracticeApplicationData.addInfo.studentId=myPageInfo.userId
 }

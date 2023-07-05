@@ -175,7 +175,7 @@
      v-model="updateDialogVisible"
    >
      <el-date-picker
-         v-if="practiceData.updatePracticeInfo.applicationState == '0' "
+         v-if="practiceData.updatePracticeInfo.applicationState == 0 "
          style="width: 180px"
          v-model="practiceData.updatePracticeInfo.practiceDatetime"
          type="datetime"
@@ -188,7 +188,7 @@
 
      <template #footer>
        <el-button @click="updateDialogVisible=false">取消</el-button>
-      <el-button v-if="practiceData.updatePracticeInfo.applicationState != '0' " type="primary" @click="updateDialogVisible=false">确定</el-button>
+      <el-button v-if="practiceData.updatePracticeInfo.applicationState != 0 " type="primary" @click="updateDialogVisible=false">确定</el-button>
        <el-button v-else type="primary" @click="makeSureUpdate">确定</el-button>
      </template>
 
@@ -199,11 +199,11 @@
    v-model="deleteDialogVisible"
    style="width: 30%"
   >
-   <h1 v-if="practiceData.deletePracticeInfo.applicationState=='0'">确定删除此申请吗？</h1>
+   <h1 v-if="practiceData.deletePracticeInfo.applicationState==0">确定删除此申请吗？</h1>
     <h1 v-else>此申请已通过，不可删除</h1>
     <template #footer>
       <el-button @click="deleteDialogVisible=false">取消</el-button>
-      <el-button v-if="practiceData.deletePracticeInfo.applicationState!='0'" type="primary" @click="deleteDialogVisible=false">确定</el-button>
+      <el-button v-if="practiceData.deletePracticeInfo.applicationState!=0" type="primary" @click="deleteDialogVisible=false">确定</el-button>
       <el-button v-else type="primary" @click="makeSureDelete" >确定</el-button>
     </template>
   </el-dialog>
@@ -432,7 +432,7 @@ const addOrder = () => {
   addDialogVisible.value = true
   addPracticeApplicationData.addInfo.practiceDatetime = ''
   addPracticeApplicationData.addInfo.practiceType = '科目二'
-  addPracticeApplicationData.addInfo.applicationState = "false"
+  addPracticeApplicationData.addInfo.applicationState =0
   addPracticeApplicationData.addInfo.coachId = studentData.studentInfo.coachId
   addPracticeApplicationData.addInfo.studentId = myPageInfo.userId
 }
