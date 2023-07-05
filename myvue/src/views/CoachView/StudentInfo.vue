@@ -192,8 +192,8 @@ export default defineComponent({
     }
     //确认删除
     const makeSureDelete = () => {
-      axios.delete("http://localhost:9090/student-entity/" +  myPageInfo.deleteId).then(res => {
-        findPeople();
+      axios.get("http://localhost:9090/student-entity/studentDelete/" +  myPageInfo.deleteId).then(res => {
+        // findPeople();
       })
       deleteDialogVisible.value = false
     }
