@@ -3,7 +3,16 @@
         <el-container>
             <el-header>
                 <el-row :gutter="20">
-                    <el-col :span="6" ><div class="grid-content ep-bg-purple"  />个人信息中心</el-col>
+                    <el-col :span="6" >
+                      <el-upload
+                          v-model:file-list="fileList"
+                          class="upload-demo"
+                          :http-request="uploadHeadPhoto"
+                          :limit="1"
+                      >
+                        <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+                      </el-upload>
+                    </el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
                     <el-col :span="6"><div class="grid-content ep-bg-purple" />
@@ -23,7 +32,9 @@
                     </el-col>
                 </el-row>
             </el-header>
-
+            <br>
+            <br>
+            <br>
             <el-container>
                 <el-aside width="200px" style="background: #a6a9de;height: 581px">
 
@@ -43,8 +54,8 @@
                             <el-menu-item-group>
                                 <el-menu-item index="1-2" @click="OnSubjectOne">科目一学习</el-menu-item>
                                 <el-menu-item index="1-3" @click="OnSubjectTwo">科目二学习</el-menu-item>
-                                <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三实践学习</el-menu-item>
-                                <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目三理论学习</el-menu-item>
+                              <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三学习</el-menu-item>
+                              <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目四学习</el-menu-item>
                                 <el-menu-item index="1-6" @click="onExam">考试</el-menu-item>
                                 <el-menu-item index="1-7" @click="onExamRegistration">考试报名</el-menu-item>
                             </el-menu-item-group>
@@ -55,7 +66,9 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main >Main</el-main>
+                <el-main >
+                  <h1 style="margin-left: 40%;margin-top: 10%">欢迎来到驾校报名系统！</h1>
+                </el-main>
             </el-container>
         </el-container>
     </div>
@@ -70,23 +83,46 @@ Location,
 Setting,
 } from '@element-plus/icons-vue'
 
-<script>
+<script lang="ts" setup>
 import { useRouter} from "vue-router";
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import request from "@/request/request";
-import health from "@icon-park/vue-next/lib/icons/Health";
+import Avatar from "@/components/Avatar.vue";
+import {UploadUserFile} from "element-plus";
+import {student} from "../../../myInterface/entity";
+import {client} from "@/utils/myoss";
 
-export default {
-    name: "StudentsHomeView",
+const fileList = ref<UploadUserFile[]>([])
+const uploadHeadPhoto = ( file:any) => {
+  let updateHeadInfo = reactive({}) as student
+  updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
+  const aliName = userData.personInfo.username + ".jpg"
+  client.put("/studentHead/" + aliName, file.file).then((res: any) => {
+    console.log(res)
+    updateHeadInfo.headPhoto = res.url
+    request.post("/student-entity/updateStudentById", updateHeadInfo).then(resp => {
+      if (resp.data == 1) {
+        router.go(0)
+        userData.personInfo.headPhoto = res.url
 
-    data(){
+      }
+    })
+  })
+}
+const userData = reactive({
+  personInfo: {} as student,
+})
 
-        return{
 
-        }
-    },
-    setup(){
 
+
+
+        onMounted(() => {
+          myPageInfo.userId = <string> router.currentRoute.value.params.userid
+          request.get("/student-entity/selectStudentById/"+myPageInfo.userId).then(res=>{
+            userData.personInfo = res.data
+          })
+        })
 
         const router = new useRouter()
 
@@ -144,34 +180,9 @@ export default {
             })
         }
         const opends = ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
-        return{
-            onEsc,
-            opends,
-            onPersonInfo,
-            OnSubjectOne,
-            OnSubjectTwo,
-            OnSubjectThreePractice,
-            OnSubjectThreeTheory,
-            onHealthy,
-            onExam,
-            onExamRegistration,
-            myPageInfo,
 
-        }
-    },
-    methods:{
 
-    },
-    created() {
-        const myRoute= new useRouter()
-        this.myPageInfo.userId =  myRoute.currentRoute.value.params.userid
-        request.get("/student-entity/selectStudentById/"+this.myPageInfo.userId).then(res=>{
-            console.log(res.data)
 
-        })
-
-    }
-}
 </script>
 
 <style scoped>

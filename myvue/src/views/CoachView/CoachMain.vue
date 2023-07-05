@@ -196,7 +196,7 @@ export default defineComponent({
      */
     const photoVisible = ref(true)
     const fileList = ref<UploadUserFile[]>([])
-    const uploadHeadPhoto = (file) => {
+    const uploadHeadPhoto = ( file:any) => {
       let updateHeadInfo = reactive({}) as userInfo
       updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
       const aliName = userData.personInfo.username + ".jpg"

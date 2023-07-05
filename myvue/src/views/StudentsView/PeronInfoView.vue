@@ -4,7 +4,14 @@
             <el-header>
                 <el-row :gutter="20">
                     <el-col :span="6">
-                        <div class="grid-content ep-bg-purple"/>
+                      <el-upload
+                          v-model:file-list="fileList"
+                          class="upload-demo"
+                          :http-request="uploadHeadPhoto"
+                          :limit="1"
+                      >
+                        <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+                      </el-upload>
 
                     </el-col>
                     <el-col :span="6">
@@ -41,7 +48,9 @@
                     </el-col>
                 </el-row>
             </el-header>
-
+            <br>
+            <br>
+            <br>
             <el-container>
                 <el-aside width="200px" style="background: #a6a9de;height: 581px">
 
@@ -62,8 +71,8 @@
                             <el-menu-item-group>
                                 <el-menu-item index="1-2" @click="OnSubjectOne">科目一学习</el-menu-item>
                                 <el-menu-item index="1-3" @click="OnSubjectTwo">科目二学习</el-menu-item>
-                                <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三实践学习</el-menu-item>
-                                <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目三理论学习</el-menu-item>
+                              <el-menu-item index="1-4" @click="OnSubjectThreePractice">科目三学习</el-menu-item>
+                              <el-menu-item index="1-5" @click="OnSubjectThreeTheory">科目四学习</el-menu-item>
                                 <el-menu-item index="1-6" @click="onExam">考试</el-menu-item>
                                 <el-menu-item index="1-7" @click="onExamRegistration">考试报名</el-menu-item>
                             </el-menu-item-group>
@@ -268,7 +277,7 @@ import {useRouter} from "vue-router";
 import {defineComponent, reactive, ref} from "vue";
 import request from "@/request/request";
 import router from "@/router";
-import {ElMessage} from "element-plus";
+import {ElMessage, UploadUserFile} from "element-plus";
 import {
     ManualGear,
     EditName,
@@ -279,6 +288,9 @@ import {
     School,
     AcceptEmail
 } from '@icon-park/vue-next'
+import Avatar from "@/components/Avatar.vue";
+import {student} from "../../../myInterface/entity";
+import {client} from "@/utils/myoss";
 
 
 
@@ -287,6 +299,7 @@ export default defineComponent({
 
     name: "StudentsHomeView",
     components: {
+      Avatar,
         EditName,
         PhoneTelephone,
         School,
@@ -308,8 +321,28 @@ export default defineComponent({
         schoolName:'',
       })
 
+      const fileList = ref<UploadUserFile[]>([])
+      const uploadHeadPhoto = ( file:any) => {
+        let updateHeadInfo = reactive({}) as student
+        updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
+        const aliName = userData.personInfo.username + ".jpg"
+        client.put("/studentHead/" + aliName, file.file).then((res: any) => {
+          console.log(res)
+          updateHeadInfo.headPhoto = res.url
+          request.post("/student-entity/updateStudentById", updateHeadInfo).then(resp => {
+            if (resp.data == 1) {
+              router.go(0)
+              userData.personInfo.headPhoto = res.url
+              console.log(userData.personInfo.headPhoto)
+            }
+          })
+        })
+      }
+      const userData = reactive({
+        personInfo: {} as student,
+      })
 
-        const ChangeCoachDialogVisible=ref(false)
+      const ChangeCoachDialogVisible=ref(false)
           const onChangePassWord=()=>{
               changePassWordDialogVisible.value=true
               request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res=>{
@@ -649,6 +682,9 @@ export default defineComponent({
             onChangePassWord,
             onCoach,
             makeSureChangeCoach,
+          fileList,
+          uploadHeadPhoto,
+          userData,
         }
     },
     methods: {
@@ -685,6 +721,11 @@ export default defineComponent({
         // console.log(res.data)
         this.options.option=res.data
 
+      })
+
+      request.get("/student-entity/selectStudentById/" + this.myPageInfo.userId).then(res => {
+        this.userData.personInfo = res.data
+        // console.log(this.userData.personInfo)
       })
     })
 
