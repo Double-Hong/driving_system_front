@@ -2,6 +2,7 @@
   <div>
     <vue3VideoPlay
         v-bind="options"
+        style="width: 100%;height: 100%"
     />
   </div>
 </template>

@@ -43,6 +43,8 @@
     <el-button @click="goToTest" style="width: 100%;position: absolute;top: 85%;left: 0">
       学时打卡
     </el-button>
+    <br>
+    <el-button @click="goToStudentCondition" style="position: absolute;width: 100%;top: 95%;left: 0">学员学习进度</el-button>
   </div>
 
 
@@ -175,6 +177,12 @@ export default defineComponent({
         path: '/coachMain/' + pageInfo.peopleId + '/test'
       })
     }
+
+    const goToStudentCondition = ()=>{
+      router.push({
+        path:'/coachMain/'+pageInfo.peopleId + '/studentCondition'
+      })
+    }
     const buttonNow = reactive({
       adminInfo: "primary" as string,
       studentInfo: "default" as string,
@@ -219,6 +227,7 @@ export default defineComponent({
       photoVisible,
       goToVideo,
       goToPracticeAdmin,
+      goToStudentCondition,
     }
   }
 

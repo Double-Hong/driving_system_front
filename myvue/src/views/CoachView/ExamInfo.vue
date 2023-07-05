@@ -149,24 +149,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <h2>填空题</h2><label>填空题总分:{{ pageInfo.blankFullFraction }}</label>
-    <el-table :data="blankData">
-      <el-table-column prop="blankTopicDescribe" label="题目" width="500"/>
-      <el-table-column prop="correctAnswer" label="答案"/>
-      <el-table-column prop="fraction" label="分值"/>
-      <el-table-column align="right">
-        <template #header>
-          <el-button @click="addBlankView" :round="true">添加填空题</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column width="190">
-
-        <template #default="scope">
-          <el-button @click="modifyBlankFraction(scope.row)">修改分值</el-button>
-          <el-button type="danger" @click="deleteOneQuestionInExamBlank(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
   </el-dialog>
   <el-dialog
       title="修改分值"

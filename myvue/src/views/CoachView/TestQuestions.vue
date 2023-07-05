@@ -2,8 +2,8 @@
   <h1 style="text-align: center">试题管理</h1>
   <el-button style="position: absolute;left: 30%;top: 6.5%;" v-show="!mainVisible" @click="mainVisible=true">选择题
   </el-button>
-  <el-button style="position: absolute;left: 65%;top: 6.5%;" v-show="mainVisible" @click="mainVisible=false">填空题
-  </el-button>
+<!--  <el-button style="position: absolute;left: 65%;top: 6.5%;" v-show="mainVisible" @click="mainVisible=false">填空题-->
+<!--  </el-button>-->
   <div v-show="mainVisible">
     <el-input style="position: absolute;left: 3%;top: 7%;width: 200px" v-model="choiceSearch"
               placeholder="在题库中搜寻选择题" clearable></el-input>
@@ -102,8 +102,10 @@
       title="确认删除"
       width="30%"
       v-model="deleteChoiceVisible"
+      style="text-align: center"
   >
     <h2>{{ deleteChoiceName }}</h2>
+    <br>
     <el-button @click="makeSureDeleteChoice">确认</el-button>
     <el-button @click="deleteChoiceVisible=false">取消</el-button>
   </el-dialog>
@@ -124,6 +126,7 @@
       title="修改选择题"
       width="30%"
       v-model="editChoiceVisible"
+      style="text-align: center"
   >
     <el-form label-width="100">
       <el-form-item label="题目">
