@@ -143,7 +143,6 @@ export default {
             if (resp.data == 1) {
               router.go(0)
               userData.personInfo.headPhoto = res.url
-
             }
           })
         })
@@ -158,7 +157,6 @@ export default {
           updateHealthInfo =JSON.parse(JSON.stringify(healthy))
           const aliName =userData.personInfo.username+".jpg"
           client.put("/healthy/"+aliName,file.file).then((res:any)=>{
-              console.log(res)
               updateHealthInfo.imageUrl=res.url
               request.post("/health-entity/updateHealty",updateHealthInfo).then(resp=>{
                   if(resp.data==1){
@@ -264,6 +262,7 @@ export default {
         //     console.log(res.data)
         //
         // })
+       console.log(this.myPageInfo.userId)
        request.get("/health-entity/getHealthyDataByStudentId/"+this.myPageInfo.userId).then(res=>{
           this.healthy.allergyHistory=res.data.allergyHistory
            this.healthy.healthId=res.data.healthId
@@ -272,7 +271,7 @@ export default {
            this.healthy.imageUrl=res.data.imageUrl
            this.healthy.studentId=res.data.studentId
            this.healthy.surgicalHistory=res.data.surgicalHistory
-
+          console.log(this.healthy)
        })
       request.get("/student-entity/selectStudentById/" + this.myPageInfo.userId).then(res => {
         this.userData.personInfo = res.data

@@ -70,10 +70,10 @@
         <el-input v-model="addExamData.examinationTime"/>
       </el-form-item>
       <el-form-item label="考试科目">
-        <el-input v-model="addExamData.examinationSubject" />
+        <el-input v-model="addExamData.examinationSubject"/>
       </el-form-item>
       <el-form-item label="考试类型">
-        <el-input v-model="addExamData.examinationType" />
+        <el-input v-model="addExamData.examinationType"/>
       </el-form-item>
       <el-form-item label="考场位置">
         <el-input v-model="addExamData.examinationAddress"/>
@@ -110,10 +110,10 @@
         <el-input v-model="editData.edit.examinationTime"/>
       </el-form-item>
       <el-form-item label="考试科目">
-        <el-input v-model="editData.edit.examinationSubject" />
+        <el-input v-model="editData.edit.examinationSubject"/>
       </el-form-item>
       <el-form-item label="考试类型">
-        <el-input v-model="editData.edit.examinationType" />
+        <el-input v-model="editData.edit.examinationType"/>
       </el-form-item>
       <el-form-item label="考场位置">
         <el-input v-model="editData.edit.examinationAddress"/>
@@ -128,27 +128,32 @@
       v-model="questionsVisible"
       style="text-align: center"
   >
-    <h2>选择题</h2><label>选择题总分:{{ pageInfo.choiceFullFraction }}</label>
-    <el-table :data="choiceData">
-      <el-table-column prop="multipleChoiceDescribe" label="题目" width="200"/>
-      <el-table-column prop="option1" label="A"/>
-      <el-table-column prop="option2" label="B"/>
-      <el-table-column prop="option3" label="C"/>
-      <el-table-column prop="option4" label="D"/>
-      <el-table-column prop="correctAnswer" label="正确答案"/>
-      <el-table-column prop="fraction" label="分值"/>
-
-
-      <el-table-column width="190">
-        <template #header>
-          <el-button @click="addChoiceView" :round="true">添加选择题</el-button>
-        </template>
-        <template #default="scope">
-          <el-button @click="modifyFraction(scope.row)">修改分值</el-button>
-          <el-button type="danger" @click="deleteOneQuestionInExam(scope.row)" icon="Delete"></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div v-if="editExamSubject=='科目二'||editExamSubject=='科目三'">
+      <h1>该考试为线下考试</h1>
+      <br><br><br>
+      <el-button icon="Close" type="danger" @click="questionsVisible=false"></el-button>
+    </div>
+    <div v-else>
+      <h2>选择题</h2><label>选择题总分:{{ pageInfo.choiceFullFraction }}</label>
+      <el-table :data="choiceData">
+        <el-table-column prop="multipleChoiceDescribe" label="题目" width="200"/>
+        <el-table-column prop="option1" label="A"/>
+        <el-table-column prop="option2" label="B"/>
+        <el-table-column prop="option3" label="C"/>
+        <el-table-column prop="option4" label="D"/>
+        <el-table-column prop="correctAnswer" label="正确答案"/>
+        <el-table-column prop="fraction" label="分值"/>
+        <el-table-column width="190">
+          <template #header>
+            <el-button @click="addChoiceView" :round="true">添加选择题</el-button>
+          </template>
+          <template #default="scope">
+            <el-button @click="modifyFraction(scope.row)">修改分值</el-button>
+            <el-button type="danger" @click="deleteOneQuestionInExam(scope.row)" icon="Delete"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </el-dialog>
   <el-dialog
       title="修改分值"
@@ -236,9 +241,25 @@
           <span v-else>考试未开始</span>
         </template>
       </el-table-column>
+      <el-table-column v-if="rowExamSubject=='科目二'||rowExamSubject=='科目三'" label="操作">
+        <template #default="{row}">
+          <el-button @click="inputSubjectScore(row)">录入成绩</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </el-dialog>
 
+  <!--  录入成绩-->
+  <el-dialog
+      title="录入成绩"
+      width="30%"
+      v-model="inputSubjectScoreVisible"
+      style="text-align: center"
+  >
+    <el-input-number v-model="inputRecordsEntity.score" :min="0" :max="100"/>
+    <br><br>
+    <el-button @click="makeSureInput">确认</el-button>
+  </el-dialog>
 
 </template>
 
@@ -480,8 +501,10 @@ const makeSureEditExam = () => {
   })
 }
 //编辑考试内容
+const editExamSubject = ref('')
 const editExamQuestions = (row: examination) => {
   pageInfo.examId = row.examinationId
+  editExamSubject.value = row.examinationSubject
   axios.get("http://localhost:9090/examination-and-multiple-choice-entity/getAllMultipleById/" + row.examinationId).then(res => {
     choiceData.value = res.data
     axios.get("http://localhost:9090/examination-and-multiple-choice-entity/getAllchoiceInfoByEid/" + row.examinationId).then(res => {
@@ -733,12 +756,41 @@ const searchBlank = () => {
 const examRecordsVisible = ref(false)
 const examRecordsList: examRecords[] = reactive([])
 const examRecordsViewList: examRecordsView[] = reactive([])
+const rowExamSubject = ref('')
 const openExamRecords = (row: examination) => {
+  rowExamSubject.value = row.examinationSubject
   request.get("/examination-student-view/getByExamId/" + row.examinationId).then(res => {
     examRecordsViewList.splice(0, examRecordsViewList.length)
     examRecordsViewList.push(...res.data)
     console.log(examRecordsViewList)
     examRecordsVisible.value = true
+  })
+}
+
+//录入科目成绩
+const inputSubjectScoreVisible = ref(false)
+let inputRecordsEntity = reactive({}) as examRecordsView
+const inputSubjectScore = (row: examRecordsView) => {
+  inputRecordsEntity = row
+  console.log(inputRecordsEntity)
+  inputSubjectScoreVisible.value = true
+}
+
+const makeSureInput = () => {
+  request.get("/exam-records-entity/inputExamScore/"+inputRecordsEntity.score+'/'+inputRecordsEntity.examRecordsId).then(res=>{
+    if (res.data==1){
+      ElMessage({
+        showClose: true,
+        message: "录入成功",
+        type: 'success'
+      })
+      request.get("/examination-student-view/getByExamId/" + inputRecordsEntity.examinationId).then(res => {
+        examRecordsViewList.splice(0, examRecordsViewList.length)
+        examRecordsViewList.push(...res.data)
+        console.log(examRecordsViewList)
+        inputSubjectScoreVisible.value = false
+      })
+    }
   })
 }
 

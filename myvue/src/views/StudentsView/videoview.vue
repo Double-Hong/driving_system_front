@@ -17,7 +17,7 @@
             科目一学习
           </el-col>
           <el-col :span="6"><div class="grid-content ep-bg-purple" />
-          {{time.AllTime}}
+
             <el-button @click="onSubmitTime">完成这次视频学习</el-button>
           </el-col>
           <el-col :span="6">

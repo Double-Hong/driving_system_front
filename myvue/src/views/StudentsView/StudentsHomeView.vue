@@ -68,6 +68,7 @@
 
                 <el-main >
                   <h1 style="margin-left: 40%;margin-top: 10%">欢迎来到驾校报名系统！</h1>
+                  <h2 v-if="Healthy.healthyInfo.imageUrl==''" style="margin-left: 35%;margin-top: 10%">请新注册的同学上传健康证明！</h2>
                 </el-main>
             </el-container>
         </el-container>
@@ -89,7 +90,7 @@ import {onMounted, reactive, ref} from "vue";
 import request from "@/request/request";
 import Avatar from "@/components/Avatar.vue";
 import {UploadUserFile} from "element-plus";
-import {student} from "../../../myInterface/entity";
+import {health, student} from "../../../myInterface/entity";
 import {client} from "@/utils/myoss";
 
 const fileList = ref<UploadUserFile[]>([])
@@ -112,7 +113,9 @@ const uploadHeadPhoto = ( file:any) => {
 const userData = reactive({
   personInfo: {} as student,
 })
-
+const Healthy =reactive({
+  healthyInfo:{} as health,
+})
 
 
 
@@ -122,6 +125,10 @@ const userData = reactive({
           request.get("/student-entity/selectStudentById/"+myPageInfo.userId).then(res=>{
             userData.personInfo = res.data
           })
+          request.get("/health-entity/getHealthyDataByStudentId/"+myPageInfo.userId).then(res=>{
+            Healthy.healthyInfo = res.data
+          })
+
         })
 
         const router = new useRouter()
