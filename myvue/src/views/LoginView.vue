@@ -1,29 +1,43 @@
 <template>
-
-  <div id="main">
+  <h1 style="text-align: center;font-family: 楷体,serif">驾 校 报 名 系 统</h1>
+  <el-card style="background-image: url('https://ts1.cn.mm.bing.net/th/id/R-C.112a7a0f12d0ac5af50eed60ee202665?rik=Ojlnobn%2bjaSAmg&riu=http%3a%2f%2fm.1234wu.com%2fbjtp%2f154.jpg&ehk=Hz1Jm%2ftTY6D3mW057kRpzZAqyBmPZ5QrOz2rusc9ybA%3d&risl=&pid=ImgRaw&r=0') ; background-size:100% 100%;position: absolute;width: 100% ;height: 80%;">
     <br><br><br><br><br><br>
-    <h1 style="text-align: center;font-family: 楷体,serif">驾 校 报 名 系 统</h1>
-    <div id="one">
-      <me id="icon1" theme="outline" size="40" fill="#333" :strokeWidth="2" strokeLinecap="butt"/>
-      <el-input style="width: 20%" v-model="form.username" clearable maxlength="20" show-word-limit></el-input>
-    </div>
 
-    <br>
-    <div id="two">
-      <keyboard-one theme="outline" size="40" fill="#333" :strokeWidth="2"/>
-      <el-input style="width: 20%" v-model="form.password" show-password clearable maxlength="20"></el-input>
-    </div>
+    <el-card style="margin: 2%; margin-left: 30%;background-color: #f8f8f8;margin-right: 30%" >
+      <el-form-item
+       label="用户名"
+       style="margin-left: 20%"
+      >
+        <me id="icon1" theme="outline" size="40" fill="#333" :strokeWidth="2" strokeLinecap="butt"/>
+        <el-input style="width: 50%" v-model="form.username" clearable maxlength="20" show-word-limit></el-input>
+      </el-form-item>
+      <br>
+      <el-form-item
+       label="密码"
+       style="margin-left: 20%"
+      >
+        <keyboard-one theme="outline" size="40" fill="#333" :strokeWidth="2"/>
+        <el-input style="width: 50%" v-model="form.password" show-password clearable maxlength="20"></el-input>
+      </el-form-item>
+      <br>
+      <el-form-item
 
-    <div id="three">
-      <el-radio-group v-model="userType" size="large">
-        <el-radio-button label="学员" style="width: 200px" />
-        <el-radio-button label="教练" style="width: 200px" />
-      </el-radio-group>
-    </div>
+      >
+        <el-radio-group v-model="userType" size="large" style="margin-left: 25%">
+          <el-radio-button label="学员" style="width: 200px" />
+          <el-radio-button label="教练" style="width: 200px" />
+        </el-radio-group>
+      </el-form-item>
+      <br>
+      <div style="display: flex">
+        <el-button @click="login" type="primary" style="margin-left: 20%;width: 20%">登录</el-button>
+        <el-button @click="" type="primary" style="margin-left: 10%;width: 20%">注册</el-button>
+      </div>
 
-    <el-button @click="login" id="loginButton">登录</el-button>
+    </el-card>
 
-  </div>
+
+  </el-card>
 
 
 </template>

@@ -212,7 +212,7 @@
 
     <template #footer>
     <el-button @click="makeSureRegistrateDialogVisible=false">取消</el-button>
-    <el-button v-if="!compare(registrateData.registrateInfo.examinationCloseTime)" type="primary" @click="makeSureRegistrateDialogVisible=false">确定</el-button>
+    <el-button v-if="!compare(registrateData.registrateInfo.examinationCloseTime)||qualification(registrateData.registrateInfo.examinationSubject)" type="primary" @click="makeSureRegistrateDialogVisible=false">确定</el-button>
     <el-button v-else type="primary"  @click="makeSureRegistretation">确认</el-button>
     </template>
   </el-dialog>
