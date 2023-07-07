@@ -12,10 +12,12 @@
         <el-col :span="18">
           <!-- clearable属性是设置为可以一键删除文本框的内容 -->
           <el-input v-model="searchName" placeholder="用户名" clearable></el-input>
-          <el-button type="primary" @click="findByName" icon="Search"/>
+          <el-button type="success" @click="findByName" icon="Search"/>
         </el-col>
       </el-row>
-      <el-table :data="visibleDataKeEr" style="width: 100%">
+      <el-table :data="visibleDataKeEr" style="width: 100%"
+                :header-cell-style="{background: '#409EFF', color: '#fff' }"
+      >
         <el-table-column prop="studentId" label="学号" width="200"></el-table-column>
         <el-table-column prop="studentName" label="姓名" width="200"/>
         <el-table-column prop="practiceTimeTwo" label="科目二时长" width="200"/>
@@ -45,7 +47,7 @@
         <el-col :span="18">
           <!-- clearable属性是设置为可以一键删除文本框的内容 -->
           <el-input v-model="searchName" placeholder="用户名" clearable></el-input>
-          <el-button type="primary" @click="findByName" :icon="Search"/>
+          <el-button type="primary" @click="findByName" icon="Search"/>
         </el-col>
       </el-row>
       <el-table :data="visibleDataKeThree" style="width: 100%">
@@ -184,9 +186,8 @@ const submit = (row: studentCondition, index: number) => {
       })
     }
   })
-  axios.post("http://localhost:9090/practice-application-entity/updatePracticeApplication",pageData.updataStudent).then(res => {
+  axios.post("http://localhost:9090/practice-application-entity/updatePracticeApplication", pageData.updataStudent).then(res => {
     console.log(res.data)
-    alert(111)
   })
 }
 //用于初始化数据

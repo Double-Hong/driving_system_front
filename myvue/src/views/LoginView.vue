@@ -51,10 +51,10 @@
 
     <el-form label-width="100px">
       <el-form-item label="姓名">
-        <el-input v-model="registerEntity.studentName" />
+        <el-input v-model="registerEntity.studentName"/>
       </el-form-item>
       <el-form-item label="登录名">
-        <el-input v-model="registerEntity.username" />
+        <el-input v-model="registerEntity.username"/>
       </el-form-item>
       <el-form-item label="生日">
 
@@ -72,20 +72,23 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="电话">
-        <el-input v-model="registerEntity.phone" />
+        <el-input v-model="registerEntity.phone"/>
       </el-form-item>
       <el-form-item label="邮箱">
-        <el-input v-model="registerEntity.email" />
+        <el-input v-model="registerEntity.email"/>
       </el-form-item>
       <el-form-item label="类型">
         <el-select v-model="registerEntity.studyType">
-          <el-option label="C1" value="C1" />
-          <el-option label="C2" value="C2" />
-          <el-option label="B1" value="B2" />
+          <el-option label="A1" value="A1"/>
+          <el-option label="A2" value="A2"/>
+          <el-option label="B1" value="B1"/>
+          <el-option label="B2" value="B2"/>
+          <el-option label="C1" value="C1"/>
+          <el-option label="C2" value="C2"/>
         </el-select>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="registerEntity.password" disabled placeholder="密码默认为123456" />
+        <el-input v-model="registerEntity.password" disabled placeholder="密码默认为123456"/>
       </el-form-item>
     </el-form>
     <el-button icon="Select" type="success" @click="makeSureRegister"></el-button>

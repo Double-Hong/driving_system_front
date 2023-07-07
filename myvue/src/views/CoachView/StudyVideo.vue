@@ -4,11 +4,15 @@
 
   <br><br><br><br><br>
   <div style="width: 100%;position: absolute;right: 0;top: 15%;">
-    <el-input v-model="search" style="width: 20%" clearable placeholder="搜索关键词" />
+    <el-input v-model="search" style="width: 20%" clearable placeholder="搜索关键词"/>
     <el-select v-model="search2">
       <el-option label="无" value=""/>
+      <el-option label="A1" value="A1"/>
+      <el-option label="A2" value="A2"/>
+      <el-option label="B1" value="B1"/>
+      <el-option label="B2" value="B2"/>
       <el-option label="C1" value="C1"/>
-      <el-option label="C2" value="C2" />
+      <el-option label="C2" value="C2"/>
     </el-select>
   </div>
 
@@ -20,7 +24,8 @@
         <MyVideo v-show="flash" :url="video.videoUrl" :videoName="video.videoName"/>
         <span style="font-size: large">{{ video.videoName }}</span>
         <el-tag size="large" style="position: absolute;right: 20%">{{ video.videoType }}</el-tag>
-        <el-button style="position: absolute;right: 0" @click="openDeleteDialog(video)" icon="Delete" type="danger"></el-button>
+        <el-button style="position: absolute;right: 0" @click="openDeleteDialog(video)" icon="Delete"
+                   type="danger"></el-button>
       </el-card>
     </div>
   </div>
@@ -38,8 +43,12 @@
       <el-form-item label="视频类型">
         <el-select v-model="updateVideo.videoType">
           <el-option label="无" value=""/>
+          <el-option label="A1" value="A1"/>
+          <el-option label="A2" value="A2"/>
+          <el-option label="B1" value="B1"/>
+          <el-option label="B2" value="B2"/>
           <el-option label="C1" value="C1"/>
-          <el-option label="C2" value="C2" />
+          <el-option label="C2" value="C2"/>
         </el-select>
       </el-form-item>
       <el-upload
@@ -60,11 +69,11 @@
       v-model="deleteVisible"
       style="text-align: center"
   >
-    <h1>{{deleteVideoEntity.videoName}}</h1>
+    <h1>{{ deleteVideoEntity.videoName }}</h1>
 
     <br>
-    <el-button icon="Select" @click="deleteVideo" type="success" />
-    <el-button icon="Close" @click="deleteVisible=false" type="danger" />
+    <el-button icon="Select" @click="deleteVideo" type="success"/>
+    <el-button icon="Close" @click="deleteVisible=false" type="danger"/>
   </el-dialog>
 </template>
 
@@ -152,15 +161,15 @@ const beforeUpload = () => {
 
 //删除视频
 const deleteVisible = ref(false)
-let deleteVideoEntity = reactive({})as Video
-const openDeleteDialog = (video:Video) => {
-  deleteVideoEntity= video
+let deleteVideoEntity = reactive({}) as Video
+const openDeleteDialog = (video: Video) => {
+  deleteVideoEntity = video
   deleteVisible.value = true
 }
 const deleteVideo = () => {
   request.get("/video-entity/deleteVideo/" + deleteVideoEntity.videoId).then(res => {
     ElMessage.success("删除成功")
-    videoInfoList.splice(indexOf(videoInfoList,deleteVideoEntity),1)
+    videoInfoList.splice(indexOf(videoInfoList, deleteVideoEntity), 1)
     // videoInfoList.splice(0, videoInfoList.length)
     // videoInfoList.push(...res.data)
   })
@@ -174,9 +183,9 @@ const deleteVideo = () => {
 //搜索
 const search = ref('')
 const search2 = ref('')
-const filterVideo =computed(()=>{
-  return videoInfoList.filter((video:Video)=>{
-    return (video.videoName.includes(search.value) ||video.videoType.includes(search.value)) &&video.videoType.includes(search2.value)
+const filterVideo = computed(() => {
+  return videoInfoList.filter((video: Video) => {
+    return (video.videoName.includes(search.value) || video.videoType.includes(search.value)) && video.videoType.includes(search2.value)
   })
 })
 

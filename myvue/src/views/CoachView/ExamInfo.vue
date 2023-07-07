@@ -4,7 +4,6 @@
 
   <el-table :data="tableData" style="width: 100%;"
             :header-cell-style="{background: '#409EFF', color: '#fff' }"
-
   >
     <el-table-column prop="examinationName" label="考试名"/>
     <el-table-column prop="examinationOpenTime" label="开始时间"/>
@@ -113,7 +112,14 @@
         <el-input v-model="editData.edit.examinationSubject"/>
       </el-form-item>
       <el-form-item label="考试类型">
-        <el-input v-model="editData.edit.examinationType"/>
+        <el-select v-model="editData.edit.examinationType">
+          <el-option label="A1" value="A1"/>
+          <el-option label="A2" value="A2"/>
+          <el-option label="B1" value="B1"/>
+          <el-option label="B2" value="B2"/>
+          <el-option label="C1" value="C1"/>
+          <el-option label="C2" value="C2"/>
+        </el-select>
       </el-form-item>
       <el-form-item label="考场位置">
         <el-input v-model="editData.edit.examinationAddress"/>
@@ -232,6 +238,9 @@
     <h1 v-if="examRecordsViewList.length!=0" style="text-align: center;font-family: 楷体,serif;">
       {{ examRecordsViewList[0].examinationName }}</h1>
     <h1 v-else>当前无人报名</h1>
+    <el-button v-if="examRecordsViewList.length!=0" @click="exportData" style="position: absolute;top: 40%;left: 80%"
+               type="success">导出成绩
+    </el-button>
     <el-table :data="examRecordsViewList">
       <el-table-column prop="studentName" label="学生"/>
 
@@ -269,6 +278,7 @@ import {useRouter} from "vue-router";
 import axios from "axios";
 import {ElMessage} from "element-plus";
 import request from "@/request/request";
+import XLSX from "xlsx";
 
 
 const pageInfo = reactive({
@@ -756,12 +766,17 @@ const searchBlank = () => {
 const examRecordsVisible = ref(false)
 const examRecordsList: examRecords[] = reactive([])
 const examRecordsViewList: examRecordsView[] = reactive([])
+const excelRecordsList: examRecords[] = reactive([])
 const rowExamSubject = ref('')
+const rowExamName = ref('')
 const openExamRecords = (row: examination) => {
   rowExamSubject.value = row.examinationSubject
+  rowExamName.value = row.examinationName
   request.get("/examination-student-view/getByExamId/" + row.examinationId).then(res => {
     examRecordsViewList.splice(0, examRecordsViewList.length)
     examRecordsViewList.push(...res.data)
+    excelRecordsList.splice(0, excelRecordsList.length)
+    excelRecordsList.push(...res.data)
     console.log(examRecordsViewList)
     examRecordsVisible.value = true
   })
@@ -777,8 +792,8 @@ const inputSubjectScore = (row: examRecordsView) => {
 }
 
 const makeSureInput = () => {
-  request.get("/exam-records-entity/inputExamScore/"+inputRecordsEntity.score+'/'+inputRecordsEntity.examRecordsId).then(res=>{
-    if (res.data==1){
+  request.get("/exam-records-entity/inputExamScore/" + inputRecordsEntity.score + '/' + inputRecordsEntity.examRecordsId).then(res => {
+    if (res.data == 1) {
       ElMessage({
         showClose: true,
         message: "录入成功",
@@ -793,6 +808,20 @@ const makeSureInput = () => {
     }
   })
 }
+
+const exportData = () => {
+  /* 创建 workbook 对象 */
+  const workbook = XLSX.utils.book_new();
+
+  /* 创建 worksheet 对象 */
+  const worksheet = XLSX.utils.json_to_sheet(excelRecordsList);
+
+  /* 将 worksheet 添加到 workbook 中 */
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+  /* 生成 Excel 文件并保存到本地 */
+  XLSX.writeFile(workbook, rowExamName.value + '成绩表.xlsx');
+};
 
 onMounted(() => {
   request.get("/examination-entity/getAllExaminationByOrginzationId" + "重庆交通驾校").then(res => {

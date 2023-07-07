@@ -20,31 +20,42 @@
     </el-button>
     <br>
     <el-button @click="goToStudentInfo" :type=buttonNow.studentInfo
-               style="width: 100%;position: absolute;top: 35%;left: 0">
+               style="width: 100%;position: absolute;top: 32%;left: 0">
       学生信息
     </el-button>
     <br>
-    <el-button @click="goToExamInfo" :type="buttonNow.examInfo" style="width: 100%;position: absolute;top:45%;left: 0;">
+    <el-button @click="goToExamInfo" :type="buttonNow.examInfo"
+               style="width: 100%;position: absolute;top:39%;left: 0;">
       考试信息
     </el-button>
     <br>
     <el-button @click="goToQuestions" :type="buttonNow.testQuestions"
-               style="width: 100%;position: absolute;top:55%;left: 0">
+               style="width: 100%;position: absolute;top:46%;left: 0">
       题目信息
     </el-button>
     <br>
     <el-button @click="goToVideo" :type="buttonNow.studyVideo"
-               style="width: 100%;position: absolute;top: 65%;left: 0">
+               style="width: 100%;position: absolute;top: 53%;left: 0">
       视频信息
     </el-button>
     <br>
-    <el-button @click="goToPracticeAdmin" style="width: 100%;position: absolute;top:75%;left: 0">练车申请</el-button>
+    <el-button @click="goToPracticeAdmin"
+               style="width: 100%;position: absolute;top:60%;left: 0" :type="buttonNow.practiceAdmin">练车申请
+    </el-button>
     <br>
-    <el-button @click="goToTest" style="width: 100%;position: absolute;top: 85%;left: 0">
+    <el-button @click="goToTest"
+               style="width: 100%;position: absolute;top: 67%;left: 0" :type="buttonNow.test">
       学时打卡
     </el-button>
     <br>
-    <el-button @click="goToStudentCondition" style="position: absolute;width: 100%;top: 95%;left: 0">学员学习进度
+    <el-button @click="goToStudentCondition"
+               style="position: absolute;width: 100%;top: 74%;left: 0" :type="buttonNow.studentCondition">学员学习进度
+    </el-button>
+    <div style="background-color: #181818;position: absolute;width: 1%;height: 100%;right: 0;top: 0;"></div>
+
+    <el-button @click="exit" type="danger" style="position: absolute;bottom: 2%;left: 0;">
+      <logout theme="outline" size="24" fill="#333" :strokeWidth="2"/>
+      退出
     </el-button>
   </div>
 
@@ -63,10 +74,11 @@ import request from "@/request/request";
 import {UploadUserFile} from "element-plus";
 import {client} from "@/utils/myoss";
 import Avatar from "@/components/Avatar.vue";
+import {Logout} from "@icon-park/vue-next";
 
 export default defineComponent({
   name: "AdminMain",
-  components: {Avatar},
+  components: {Avatar, Logout},
   created() {
     // const myRouter = useRouter()
     // this.pageInfo.peopleId = <string>myRouter.currentRoute.value.params.peopleId
@@ -118,6 +130,9 @@ export default defineComponent({
       buttonNow.examInfo = "default"
       buttonNow.testQuestions = "default"
       buttonNow.studyVideo = "default"
+      buttonNow.practiceAdmin = "default"
+      buttonNow.test = "default"
+      buttonNow.studentCondition = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/CoachInfo'
       })
@@ -129,6 +144,9 @@ export default defineComponent({
       buttonNow.examInfo = "default"
       buttonNow.testQuestions = "default"
       buttonNow.studyVideo = "default"
+      buttonNow.practiceAdmin = "default"
+      buttonNow.test = "default"
+      buttonNow.studentCondition = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/studentInfo'
       })
@@ -140,6 +158,9 @@ export default defineComponent({
       buttonNow.examInfo = "primary"
       buttonNow.testQuestions = "default"
       buttonNow.studyVideo = "default"
+      buttonNow.practiceAdmin = "default"
+      buttonNow.test = "default"
+      buttonNow.studentCondition = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/examInfo'
       })
@@ -151,6 +172,9 @@ export default defineComponent({
       buttonNow.examInfo = "default"
       buttonNow.testQuestions = "primary"
       buttonNow.studyVideo = "default"
+      buttonNow.practiceAdmin = "default"
+      buttonNow.test = "default"
+      buttonNow.studentCondition = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/testQuestions'
       })
@@ -162,26 +186,58 @@ export default defineComponent({
       buttonNow.examInfo = "default"
       buttonNow.testQuestions = "default"
       buttonNow.studyVideo = "primary"
+      buttonNow.practiceAdmin = "default"
+      buttonNow.test = "default"
+      buttonNow.studentCondition = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/studyVideo'
       })
     }
 
     const goToPracticeAdmin = () => {
+      buttonNow.studentInfo = "default"
+      buttonNow.adminInfo = "default"
+      buttonNow.examInfo = "default"
+      buttonNow.testQuestions = "default"
+      buttonNow.studyVideo = "default"
+      buttonNow.practiceAdmin = "primary"
+      buttonNow.test = "default"
+      buttonNow.studentCondition = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/practiceAdmin'
       })
     }
 
     const goToTest = () => {
+      buttonNow.studentInfo = "default"
+      buttonNow.adminInfo = "default"
+      buttonNow.examInfo = "default"
+      buttonNow.testQuestions = "default"
+      buttonNow.studyVideo = "default"
+      buttonNow.practiceAdmin = "default"
+      buttonNow.test = "primary"
+      buttonNow.studentCondition = "default"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/test'
       })
     }
 
     const goToStudentCondition = () => {
+      buttonNow.studentInfo = "default"
+      buttonNow.adminInfo = "default"
+      buttonNow.examInfo = "default"
+      buttonNow.testQuestions = "default"
+      buttonNow.studyVideo = "default"
+      buttonNow.practiceAdmin = "default"
+      buttonNow.test = "default"
+      buttonNow.studentCondition = "primary"
       router.push({
         path: '/coachMain/' + pageInfo.peopleId + '/studentCondition'
+      })
+    }
+    const exit = () => {
+      router.push({
+        path: '/'
       })
     }
     const buttonNow = reactive({
@@ -190,6 +246,9 @@ export default defineComponent({
       examInfo: "default" as string,
       testQuestions: "default" as string,
       studyVideo: "default" as string,
+      practiceAdmin: "default" as string,
+      test: "default" as string,
+      studentCondition: "default" as string,
     })
 
     /*
@@ -229,6 +288,7 @@ export default defineComponent({
       goToVideo,
       goToPracticeAdmin,
       goToStudentCondition,
+      exit,
     }
   }
 
@@ -242,8 +302,7 @@ export default defineComponent({
   height: 100%;
   top: 0;
   left: 0;
-  background-color: aqua;
-  text-align: center;
+//background-color: aqua; text-align: center;
 }
 
 #children {

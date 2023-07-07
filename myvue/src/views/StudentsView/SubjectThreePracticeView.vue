@@ -3,28 +3,42 @@
     <el-container>
       <el-header>
         <el-row :gutter="20">
-          <el-col :span="6" ><div class="grid-content ep-bg-purple"  />
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
             <el-upload
                 v-model:file-list="fileList"
                 class="upload-demo"
                 :http-request="uploadHeadPhoto"
                 :limit="1"
             >
-              <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+              <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()"/>
             </el-upload>
           </el-col>
-          <el-col :span="6"><div class="grid-content ep-bg-purple" />科目三学习</el-col>
-          <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
-          <el-col :span="6"><div class="grid-content ep-bg-purple" />
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
+            科目三学习
+          </el-col>
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
+          </el-col>
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
             <el-dropdown>
               <el-button type="primary" style="margin-left: 300px">
-                操作<el-icon class="el-icon--right"></el-icon>
+                操作
+                <el-icon class="el-icon--right"></el-icon>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item> <el-button @click="onPersonInfo">个人信息中心</el-button></el-dropdown-item>
-                  <el-dropdown-item> <el-button @click="onHealthy">绑定健康信息</el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button @click="onEsc">退出登录</el-button></el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onPersonInfo">个人信息中心</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onHealthy">绑定健康信息</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onEsc">退出登录</el-button>
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -32,9 +46,9 @@
           </el-col>
         </el-row>
       </el-header>
-       <br>
-        <br>
-        <br>
+      <br>
+      <br>
+      <br>
       <el-container>
         <el-aside width="200px" style="background: #a6a9de;height: 581px">
 
@@ -66,7 +80,7 @@
           </el-menu>
         </el-aside>
 
-        <el-main >
+        <el-main>
           <h1 style="margin-left: 500px"> 科目三需要上车打卡学习,请向你的教练预约学习！</h1>
 
           <br>
@@ -74,7 +88,8 @@
           <br>
           <div>
             <el-button style="margin-block: 10px" @click="addOrder">申请练车</el-button>
-            <el-input placeholder="输入申请时间进行搜索" v-model="search" style="width: 400px;margin-left: 100px"></el-input>
+            <el-input placeholder="输入申请时间进行搜索" v-model="search"
+                      style="width: 400px;margin-left: 100px"></el-input>
           </div>
 
           <el-table
@@ -174,7 +189,9 @@
 
     <template #footer>
       <el-button @click="updateDialogVisible=false">取消</el-button>
-      <el-button v-if="practiceData.updatePracticeInfo.applicationState != '0' " type="primary" @click="updateDialogVisible=false">确定</el-button>
+      <el-button v-if="practiceData.updatePracticeInfo.applicationState != '0' " type="primary"
+                 @click="updateDialogVisible=false">确定
+      </el-button>
       <el-button v-else type="primary" @click="makeSureUpdate">确定</el-button>
     </template>
 
@@ -189,8 +206,10 @@
     <h1 v-else>此申请已通过，不可删除</h1>
     <template #footer>
       <el-button @click="deleteDialogVisible=false">取消</el-button>
-      <el-button v-if="practiceData.deletePracticeInfo.applicationState!='0'" type="primary" @click="deleteDialogVisible=false">确定</el-button>
-      <el-button v-else type="primary" @click="makeSureDelete" >确定</el-button>
+      <el-button v-if="practiceData.deletePracticeInfo.applicationState!='0'" type="primary"
+                 @click="deleteDialogVisible=false">确定
+      </el-button>
+      <el-button v-else type="primary" @click="makeSureDelete">确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -203,18 +222,18 @@ Setting,
 } from '@element-plus/icons-vue'
 
 <script lang="ts" setup>
-import { useRouter} from "vue-router";
+import {useRouter} from "vue-router";
 import {computed, onMounted, reactive, ref} from "vue";
 import request from "@/request/request";
 import health from "@icon-park/vue-next/lib/icons/Health";
-import type {practiceApplication,student} from "../../../myInterface/entity";
+import type {practiceApplication, student} from "../../../myInterface/entity";
 import {ElMessage, UploadUserFile} from "element-plus";
 import Avatar from "@/components/Avatar.vue";
 import {client} from "@/utils/myoss";
 
 
 const fileList = ref<UploadUserFile[]>([])
-const uploadHeadPhoto = ( file:any) => {
+const uploadHeadPhoto = (file: any) => {
   let updateHeadInfo = reactive({}) as student
   updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
   const aliName = userData.personInfo.username + ".jpg"
@@ -236,7 +255,6 @@ const userData = reactive({
 })
 
 
-
 const deleteDialogVisible = ref(false)
 const onUpdate = (row: practiceApplication) => {
 
@@ -246,7 +264,7 @@ const onUpdate = (row: practiceApplication) => {
 
 
 }
-const practiceData= reactive({
+const practiceData = reactive({
   updatePracticeInfo: {} as practiceApplication,
   deletePracticeInfo: {} as practiceApplication
 })
@@ -260,7 +278,7 @@ const makeSureUpdate = () => {
         message: '修改成功',
         type: 'success'
       })
-      practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId==practiceData.updatePracticeInfo.practiceId),1)
+      practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId == practiceData.updatePracticeInfo.practiceId), 1)
       practiceApplicationData.push(practiceData.updatePracticeInfo)
     } else {
       ElMessage({
@@ -274,20 +292,20 @@ const makeSureUpdate = () => {
 }
 const updateDialogVisible = ref(false)
 const onDelete = (row: practiceApplication) => { //删除
-  deleteDialogVisible.value= true
+  deleteDialogVisible.value = true
   practiceData.deletePracticeInfo = row
 
 }
-const makeSureDelete=()=>{
-  request.get("/practice-application-entity/deletedById/"+practiceData.deletePracticeInfo.practiceId).then((res)=>{
-    if(res.data==1){
+const makeSureDelete = () => {
+  request.get("/practice-application-entity/deletedById/" + practiceData.deletePracticeInfo.practiceId).then((res) => {
+    if (res.data == 1) {
       deleteDialogVisible.value = false
       ElMessage({
         message: '删除成功',
         type: 'success'
       })
-      practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId==practiceData.deletePracticeInfo.practiceId),1)
-    }else{
+      practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId == practiceData.deletePracticeInfo.practiceId), 1)
+    } else {
       ElMessage({
         message: '删除失败',
         type: 'error'
@@ -296,14 +314,14 @@ const makeSureDelete=()=>{
   })
 }
 
-const openeds=ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
+const openeds = ref(["1-2", "1-3", "1-4", "1-5", "1-6", "1-7"])
 
-    const addDialogVisible=ref(false)
+const addDialogVisible = ref(false)
 const disabledDate = (time: Date) => {
   return time.getTime() < Date.now()
 }
-const makeSureAdd=()=>{
-  if (addPracticeApplicationData.addInfo.practiceDatetime==null){
+const makeSureAdd = () => {
+  if (addPracticeApplicationData.addInfo.practiceDatetime == null) {
     ElMessage({
       message: '请选择预约时间',
       type: 'error'
@@ -311,19 +329,19 @@ const makeSureAdd=()=>{
     return
   }
 
-  request.post("/practice-application-entity/insertPracticeApplication",addPracticeApplicationData.addInfo).then((res)=>{
-    if(res.data==1){
-      addDialogVisible.value=false
+  request.post("/practice-application-entity/insertPracticeApplication", addPracticeApplicationData.addInfo).then((res) => {
+    if (res.data == 1) {
+      addDialogVisible.value = false
       ElMessage({
         message: '申请提交成功',
         type: 'success'
       })
-      practiceApplicationData.splice(0,practiceApplicationData.length)
-      request.get("/practice-application-entity/getPracticeApplicationByStudentId/"+myPageInfo.userId+"/"+"科目三").then((res)=>{
+      practiceApplicationData.splice(0, practiceApplicationData.length)
+      request.get("/practice-application-entity/getPracticeApplicationByStudentId/" + myPageInfo.userId + "/" + "科目三").then((res) => {
         practiceApplicationData.push(...res.data)
       })
 
-    }else {
+    } else {
       ElMessage({
         message: '申请提交失败',
         type: 'error'
@@ -332,78 +350,78 @@ const makeSureAdd=()=>{
   })
 
 }
-const search=ref("")
+const search = ref("")
 
-const router =  useRouter()
+const router = useRouter()
 
-const myPageInfo=reactive({
-  userId:'',
+const myPageInfo = reactive({
+  userId: '',
 })
-const studentData=reactive({
-  studentInfo:{} as student
+const studentData = reactive({
+  studentInfo: {} as student
 })
 
 const onEsc = () => {
   router.push({
-    path:'/'
+    path: '/'
   })
 
 }
 const onPersonInfo = () => {
   router.push({
-    path:'/PersonInfo/'+myPageInfo.userId
+    path: '/PersonInfo/' + myPageInfo.userId
   })
 
 }
 const OnSubjectOne = () => {
   router.push({
-    path:'/SubjectOne/'+myPageInfo.userId
+    path: '/SubjectOne/' + myPageInfo.userId
   })
 }
 const OnSubjectTwo = () => {
   router.push({
-    path:'/SubjectTwo/'+myPageInfo.userId
+    path: '/SubjectTwo/' + myPageInfo.userId
   })
 }
 const onHealthy = () => {
   router.push({
-    path:'/Healthy/'+myPageInfo.userId
+    path: '/Healthy/' + myPageInfo.userId
   })
 }
 
 
 const OnSubjectThreePractice = () => {
   router.push({
-    path:'/SubjectThreePractice/'+myPageInfo.userId
+    path: '/SubjectThreePractice/' + myPageInfo.userId
   })
 }
 const OnSubjectThreeTheory = () => {
   router.push({
-    path:'/SubjectThreeTheory/'+myPageInfo.userId
+    path: '/SubjectThreeTheory/' + myPageInfo.userId
   })
 }
 const onExam = () => {
   router.push({
-    path:'/Exam/'+myPageInfo.userId
+    path: '/Exam/' + myPageInfo.userId
   })
 }
 const onExamRegistration = () => {
   router.push({
-    path:'/ExamRegistration/'+myPageInfo.userId
+    path: '/ExamRegistration/' + myPageInfo.userId
   })
 }
-const  practiceApplicationData:practiceApplication[]=reactive([])
-const addPracticeApplicationData=reactive({
-  addInfo:{} as practiceApplication
+const practiceApplicationData: practiceApplication[] = reactive([])
+const addPracticeApplicationData = reactive({
+  addInfo: {} as practiceApplication
 })
 
 onMounted(() => {
-  myPageInfo.userId =  <string>router.currentRoute.value.params.userid
-  request.get("/practice-application-entity/getPracticeApplicationByStudentId/"+myPageInfo.userId+"/"+"科目三").then((res)=>{
+  myPageInfo.userId = <string>router.currentRoute.value.params.userid
+  request.get("/practice-application-entity/getPracticeApplicationByStudentId/" + myPageInfo.userId + "/" + "科目三").then((res) => {
     practiceApplicationData.push(...res.data)
   })
-  request.get("/student-entity/selectStudentById/"+myPageInfo.userId).then((res)=>{
-    studentData.studentInfo=res.data
+  request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then((res) => {
+    studentData.studentInfo = res.data
   })
   request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
     userData.personInfo = res.data
@@ -413,18 +431,18 @@ onMounted(() => {
 })
 
 
-const filterPracticeApplicationData=computed(()=>{
-  return practiceApplicationData.filter((item)=>{
+const filterPracticeApplicationData = computed(() => {
+  return practiceApplicationData.filter((item) => {
     return item.practiceDatetime.includes(search.value)
   })
 })
-const addOrder=()=>{
-  addDialogVisible.value=true
-  addPracticeApplicationData.addInfo.practiceDatetime=''
-  addPracticeApplicationData.addInfo.practiceType='科目三'
-  addPracticeApplicationData.addInfo.applicationState=0
-  addPracticeApplicationData.addInfo.coachId=studentData.studentInfo.coachId
-  addPracticeApplicationData.addInfo.studentId=myPageInfo.userId
+const addOrder = () => {
+  addDialogVisible.value = true
+  addPracticeApplicationData.addInfo.practiceDatetime = ''
+  addPracticeApplicationData.addInfo.practiceType = '科目三'
+  addPracticeApplicationData.addInfo.applicationState = 0
+  addPracticeApplicationData.addInfo.coachId = studentData.studentInfo.coachId
+  addPracticeApplicationData.addInfo.studentId = myPageInfo.userId
 }
 
 

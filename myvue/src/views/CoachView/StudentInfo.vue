@@ -1,13 +1,14 @@
 <template>
 
   <!--  顶部栏-->
-  <el-card class="box-card"  id="search">
+  <el-card class="box-card" id="search">
     <el-row>
       <el-col :span="18">
         <!-- clearable属性是设置为可以一键删除文本框的内容 -->
         <el-input v-model="searchName" placeholder="用户名" clearable></el-input>
-        <el-button type="primary" @click="findPeople" :icon="Search"/></el-col>
-      <el-col :span="6" >
+        <el-button type="primary" @click="findPeople" icon="Search"/>
+      </el-col>
+      <el-col :span="6">
         <el-button type="success" size="small" @click="exportData">导出excel</el-button>
       </el-col>
     </el-row>
@@ -15,7 +16,9 @@
 
   <!--用户信息展示列表-->
   <el-card class="box-card">
-    <el-table :data="tableData.studentList" stripe style="width: 100%">
+    <el-table :data="tableData.studentList" stripe style="width: 100%"
+              :header-cell-style="{background: '#409EFF', color: '#fff' }"
+    >
       <el-table-column prop="studentName" label="姓名" width="100"/>
       <el-table-column prop="gender" label="性别" width="120"/>
       <el-table-column prop="email" label="邮箱" width="200"/>
@@ -39,6 +42,7 @@
             Delete
           </el-button
           >
+          <el-button type="info" @click="openHealthDialog(scope.row)">查看健康信息</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -51,7 +55,7 @@
       :title="title"
       width="30%"
   >
-    <el-form :model="dialogData" label-width="80px" ref="ruleFormRef" >
+    <el-form :model="dialogData" label-width="80px" ref="ruleFormRef">
       <el-form-item label="姓名">
         <el-input clearable v-model="dialogData.studentName"/>
       </el-form-item>
@@ -86,25 +90,42 @@
     <el-button @click="deleteDialogVisible=false">取消</el-button>
   </el-dialog>
 
+
+  <!--  查看健康信息-->
+  <el-dialog
+      v-model="healthDialogVisible"
+      title="健康信息"
+      width="50%"
+      style="text-align: center;"
+  >
+    <h1 v-if="rowHealthUrl==null">
+      未上传健康信息
+    </h1>
+    <el-image v-else :src="rowHealthUrl">
+
+    </el-image>
+  </el-dialog>
 </template>
 
 <script lang="ts">
 
-import {defineComponent, reactive, ref,getCurrentInstance} from "vue";
+import {defineComponent, reactive, ref, getCurrentInstance, computed} from "vue";
 import axios from "axios";
-import {Repair, Delete, Search,Plus} from "@icon-park/vue-next"
-import type {FormInstance,FormRules} from "element-plus";
+import {Repair, Delete, Search, Plus} from "@icon-park/vue-next"
+import type {FormInstance, FormRules} from "element-plus";
 import XLSX from 'xlsx';
 import {ElMessage} from "element-plus";
 
 interface studentInfo {
-  studentName:string
-  gender:string
-  phone:string
-  email:string
-  birthday:string
-  studyType:string
-  studentId:string
+  studentName: string
+  gender: string
+  phone: string
+  email: string
+  birthday: string
+  studyType: string
+  studentId: string
+  healthId: string
+  coachId: string
 }
 
 export default defineComponent({
@@ -124,10 +145,11 @@ export default defineComponent({
   },
   created() {
     this.userInfo.id = <string>this.$route.params.peopleId
-    axios.get("http://localhost:9090/student-entity"
+    console.log(this.userInfo.id)
+    axios.get("http://localhost:9090/student-entity/getStudentByCoachId/" + this.userInfo.id
     ).then(res => {
-      this.tableData.studentList = res.data.data
-      // console.log(res.data.data)
+      this.tableData.studentList = res.data
+
     })
   },
   setup() {
@@ -160,7 +182,7 @@ export default defineComponent({
           age: "",
           birthday: "",
           phone: "",
-          id:"",
+          id: "",
         }
     )
 
@@ -170,19 +192,21 @@ export default defineComponent({
     //要删除的学生信息
     const myPageInfo = reactive({
       deleteId: "",
-      deleteName:"",
+      deleteName: "",
     })
 
     //修改用户
     const handleEdit = (index: number, row: studentInfo) => {
       dialogVisible.value = true
       dialogData.studentName = row.studentName
-      dialogData.studyType=row.studyType
-      dialogData.gender=row.gender
-      dialogData.email=row.email
+      dialogData.studyType = row.studyType
+      dialogData.gender = row.gender
+      dialogData.email = row.email
       dialogData.phone = row.phone
-      dialogData.birthday=row.birthday
-      dialogData.studentId=row.studentId
+      dialogData.birthday = row.birthday
+      dialogData.studentId = row.studentId
+      dialogData.healthId = row.healthId
+      dialogData.coachId = row.coachId
     }
     //删除用户
     const handleDelete = (index: number, row: studentInfo) => {
@@ -192,7 +216,7 @@ export default defineComponent({
     }
     //确认删除
     const makeSureDelete = () => {
-      axios.get("http://localhost:9090/student-entity/studentDelete/" +  myPageInfo.deleteId).then(res => {
+      axios.get("http://localhost:9090/student-entity/studentDelete/" + myPageInfo.deleteId).then(res => {
         // findPeople();
       })
       deleteDialogVisible.value = false
@@ -200,12 +224,14 @@ export default defineComponent({
     const tableData = reactive({
       studentList: [{
         studentId: " ",
-        studentName:"",
-        email:"",
-        studyType:"",
-        phone:"",
-        gender:"",
-        birthday:"",
+        studentName: "",
+        email: "",
+        studyType: "",
+        phone: "",
+        gender: "",
+        birthday: "",
+        healthId: "",
+        coachId: "",
       }
       ]
     })
@@ -213,12 +239,12 @@ export default defineComponent({
 
     //修改联系人
     const addPeople = () => {
-      dialogVisible.value=true
+      dialogVisible.value = true
       console.log(dialogData)
       axios.post("http://localhost:9090/student-entity/updateStudent", dialogData).then(res => {
         //findPeople();
         if (res.data.message === "success") {
-          dialogVisible.value=false
+          dialogVisible.value = false
           ElMessage({
             message: '修改成功',
             type: 'success',
@@ -242,18 +268,40 @@ export default defineComponent({
     }
 
     //通过id查找
-    const findStudentById = (id) =>{
+    const findStudentById = (id) => {
       console.log(id)
-      axios.get("http://localhost:9090/student-entity/findById/"+id).then(res => {
+      axios.get("http://localhost:9090/student-entity/findById/" + id).then(res => {
         // console.log(res.data.data)
-        dialogData.birthday=res.data.data.birthday
-        dialogData.gender=res.data.data.gender
-        dialogData.studentName=res.data.data.studentName
-        dialogData.studyType=res.data.data.studyType
-        dialogData.email=res.data.data.email
-        dialogData.phone=res.data.data.phone
+        dialogData.birthday = res.data.data.birthday
+        dialogData.gender = res.data.data.gender
+        dialogData.studentName = res.data.data.studentName
+        dialogData.studyType = res.data.data.studyType
+        dialogData.email = res.data.data.email
+        dialogData.phone = res.data.data.phone
       })
     }
+
+    //查看健康信息
+    const healthDialogVisible = ref(false)
+    const rowHealthId = ref("")
+    const rowHealthUrl = ref("")
+    const openHealthDialog = (row: studentInfo) => {
+      rowHealthId.value = row.healthId
+      axios.get("http://localhost:9090/health-entity/getHealthById/" + row.healthId).then(res => {
+        rowHealthUrl.value = res.data.imageUrl
+        console.log(res.data)
+        healthDialogVisible.value = true
+      })
+
+    }
+
+    //过滤器
+    const filterData = computed(() => {
+      return tableData.studentList.filter(item => {
+        return item.coachId.includes(userInfo.id)
+      })
+    })
+
 
     return {
       tableData,
@@ -271,6 +319,10 @@ export default defineComponent({
       searchName,
       userInfo,
       exportData,
+      healthDialogVisible,
+      rowHealthId,
+      openHealthDialog,
+      rowHealthUrl,
     }
   }
 

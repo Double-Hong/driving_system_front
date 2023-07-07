@@ -10,7 +10,9 @@
   <!--  未办申请信息-->
   <div v-if="showCard1">
     <el-card class="box-card">
-      <el-table ref="tableRef" :data="visibleData" stripe style="width: 100%">
+      <el-table ref="tableRef" :data="visibleData" stripe style="width: 100%"
+                :header-cell-style="{background: '#409EFF', color: '#fff' }"
+      >
         <el-table-column prop="studentName" label="姓名" width="150"/>
         <el-table-column prop="practiceDatetime" label="申请时间" width="200"/>
         <el-table-column label="申请状态">
@@ -41,7 +43,7 @@
   </div>
 
   <!--  所有学生信息-->
-  <div  v-if="!showCard1">
+  <div v-if="!showCard1">
     <el-card class="box-card">
       <el-table :data="studentData.allApplication" stripe style="width: 100%">
         <el-table-column prop="studentName" label="姓名" width="150"/>
@@ -74,39 +76,40 @@ import {toNumber} from "lodash";
 
 const radio1 = ref('未办申请')
 const showCard1 = ref(true)
-interface studentInfo{
-  practiceDatetime:string
-  applicationState:number
-  studentName:string
-  studentId:number
-  practiceId:number
-  coachId:number
+
+interface studentInfo {
+  practiceDatetime: string
+  applicationState: number
+  studentName: string
+  studentId: number
+  practiceId: number
+  coachId: number
 }
 
-const studentData= reactive({
-  allApplication:[{
-    practiceDatetime:"",
-    applicationState:0,
-    studentName:"",
-    studentId:0,
-    practiceId:0,
-    coachId:0,
+const studentData = reactive({
+  allApplication: [{
+    practiceDatetime: "",
+    applicationState: 0,
+    studentName: "",
+    studentId: 0,
+    practiceId: 0,
+    coachId: 0,
   }],
-  unEditApplication:[{
-    practiceDatetime:"",
-    applicationState:0,
-    studentName:"",
-    studentId:0,
-    practiceId:0,
-    coachId:0,
+  unEditApplication: [{
+    practiceDatetime: "",
+    applicationState: 0,
+    studentName: "",
+    studentId: 0,
+    practiceId: 0,
+    coachId: 0,
   }],
-  editApplication:{} as studentInfo
+  editApplication: {} as studentInfo
 })
 //获取所有信息
-const getAllApplication = () =>{
-  axios.get("http://localhost:9090/practice-application-entity").then(res=> {
-        studentData.allApplication=res.data.data
-        studentData.unEditApplication=res.data.data
+const getAllApplication = () => {
+  axios.get("http://localhost:9090/practice-application-entity").then(res => {
+        studentData.allApplication = res.data.data
+        studentData.unEditApplication = res.data.data
       }
   )
 }
@@ -117,7 +120,7 @@ onMounted(() => {
 
 // 使用 filter 方法筛选出 applicationState 为 false 的数据
 
-const getUnEditApplication = () =>{
+const getUnEditApplication = () => {
 
 }
 const visibleData = reactive([] as studentInfo[])
@@ -143,15 +146,15 @@ const updateVisibleData = (data: studentInfo[]) => {
 }
 
 
-const submit = (index:number,row:studentInfo) =>{
-  studentData.editApplication.applicationState=1
-  studentData.editApplication.studentName=row.studentName
-  studentData.editApplication.practiceDatetime=row.practiceDatetime
-  studentData.editApplication.studentId=row.studentId
-  studentData.editApplication.coachId=row.coachId
-  studentData.editApplication.practiceId=row.practiceId
+const submit = (index: number, row: studentInfo) => {
+  studentData.editApplication.applicationState = 1
+  studentData.editApplication.studentName = row.studentName
+  studentData.editApplication.practiceDatetime = row.practiceDatetime
+  studentData.editApplication.studentId = row.studentId
+  studentData.editApplication.coachId = row.coachId
+  studentData.editApplication.practiceId = row.practiceId
   console.log(studentData.editApplication)
-  axios.post("http://localhost:9090/practice-application-entity/updateApplication",studentData.editApplication).then(res=>{
+  axios.post("http://localhost:9090/practice-application-entity/updateApplication", studentData.editApplication).then(res => {
     console.log(res.data)
     if (res.data.message === "success") {
       ElMessage({

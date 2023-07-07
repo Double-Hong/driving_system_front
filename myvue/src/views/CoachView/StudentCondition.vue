@@ -3,11 +3,15 @@
   <el-button v-if="!progressVisible" @click="progressVisible=true" icon="Menu">显示进度</el-button>
   <el-button v-else @click="progressVisible=false" icon="Menu">显示数值</el-button>
   <div style="position: absolute;width: 40%;top:11%;right: 0">
-    <el-input v-model="search" style="width: 50%" />
-    <el-select v-model="select" >
+    <el-input v-model="search" style="width: 50%"/>
+    <el-select v-model="select">
       <el-option label="全部" value=""/>
+      <el-option label="A1" value="A1"/>
+      <el-option label="A2" value="A2"/>
+      <el-option label="B1" value="B1"/>
+      <el-option label="B2" value="B2"/>
       <el-option label="C1" value="C1"/>
-      <el-option label="C2" value="C2" />
+      <el-option label="C2" value="C2"/>
     </el-select>
   </div>
 
@@ -25,7 +29,7 @@
         <el-progress v-if="progressVisible" :text-inside="true" :stroke-width="18"
                      :percentage="(scope.row.practiceTimeOne/9.6).toFixed(1)" status="success">
           <template #default="{percentage }">
-            <span style="color: #181818">{{ (scope.row.practiceTimeOne/9.6).toFixed(1) }}%</span>
+            <span style="color: #181818">{{ (scope.row.practiceTimeOne / 9.6).toFixed(1) }}%</span>
           </template>
         </el-progress>
         <span v-else>{{ scope.row.practiceTimeOne }}分钟</span>
@@ -36,7 +40,7 @@
         <el-progress v-if="progressVisible" :text-inside="true" :stroke-width="18"
                      :percentage="(scope.row.practiceTimeTwo/7.2).toFixed(1)" status="success">
           <template #default="{percentage }">
-            <span style="color: #181818">{{ (scope.row.practiceTimeTwo/7.2).toFixed(1) }}%</span>
+            <span style="color: #181818">{{ (scope.row.practiceTimeTwo / 7.2).toFixed(1) }}%</span>
           </template>
         </el-progress>
         <span v-else>{{ scope.row.practiceTimeTwo }}分钟</span>
@@ -47,7 +51,7 @@
         <el-progress v-if="progressVisible" :text-inside="true" :stroke-width="18"
                      :percentage="(scope.row.practiceTimeThree/7.2).toFixed(1)" status="success">
           <template #default="{percentage }">
-            <span style="color: #181818">{{ (scope.row.practiceTimeThree/7.2).toFixed(1) }}%</span>
+            <span style="color: #181818">{{ (scope.row.practiceTimeThree / 7.2).toFixed(1) }}%</span>
           </template>
         </el-progress>
         <span v-else>{{ scope.row.practiceTimeThree }}分钟</span>
@@ -58,7 +62,7 @@
         <el-progress v-if="progressVisible" :text-inside="true" :stroke-width="18"
                      :percentage="(scope.row.practiceTimeFour/9.6).toFixed(1)" status="success">
           <template #default="{percentage }">
-            <span style="color: #181818">{{ (scope.row.practiceTimeFour/9.6).toFixed(1) }}%</span>
+            <span style="color: #181818">{{ (scope.row.practiceTimeFour / 9.6).toFixed(1) }}%</span>
           </template>
         </el-progress>
         <span v-else>{{ scope.row.practiceTimeFour }}分钟</span>
@@ -87,13 +91,14 @@ interface StudentCondition {
   practiceTimeTwo: string,
   practiceTimeThree: string,
   practiceTimeFour: string,
+  coachId: string
 }
 
 const studentConditionList: StudentCondition[] = reactive([])
 const coachId = inject('peopleId')
 
 onMounted(() => {
-  request.get("/student_study_condition_view/getAll").then(res => {
+  request.get("/student_study_condition_view/getByCoachId/" + coachId).then(res => {
     console.log(res.data)
     studentConditionList.splice(0, studentConditionList.length)
     studentConditionList.push(...res.data)
@@ -104,10 +109,10 @@ onMounted(() => {
 const progressVisible = ref(false)
 
 //筛选
-const search =ref('')
+const search = ref('')
 const select = ref('')
-const filterCondition = computed(()=>{
-  return studentConditionList.filter((item:StudentCondition)=>{
+const filterCondition = computed(() => {
+  return studentConditionList.filter((item: StudentCondition) => {
     return (item.studentName.includes(search.value)) && item.studyType.includes(select.value)
   })
 })

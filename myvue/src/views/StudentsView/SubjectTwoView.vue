@@ -10,7 +10,7 @@
                 :http-request="uploadHeadPhoto"
                 :limit="1"
             >
-              <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+              <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()"/>
             </el-upload>
           </el-col>
           <el-col :span="6">
@@ -168,43 +168,47 @@
       </span>
     </template>
   </el-dialog>
-   <el-dialog
-     width="30%"
-      title="修改练车时间"
-     center
-     v-model="updateDialogVisible"
-   >
-     <el-date-picker
-         v-if="practiceData.updatePracticeInfo.applicationState == 0 "
-         style="width: 180px"
-         v-model="practiceData.updatePracticeInfo.practiceDatetime"
-         type="datetime"
-         placeholder="选择日期"
-         format="YYYY/MM/DD HH:mm:ss"
-         value-format="YYYY-MM-DD HH:mm:ss"
-         :disabled-date="disabledDate"
-     />
-     <h1 v-else>此申请不可修改</h1>
-
-     <template #footer>
-       <el-button @click="updateDialogVisible=false">取消</el-button>
-      <el-button v-if="practiceData.updatePracticeInfo.applicationState != 0 " type="primary" @click="updateDialogVisible=false">确定</el-button>
-       <el-button v-else type="primary" @click="makeSureUpdate">确定</el-button>
-     </template>
-
-   </el-dialog>
   <el-dialog
-   title="删除申请"
-   center
-   v-model="deleteDialogVisible"
-   style="width: 30%"
+      width="30%"
+      title="修改练车时间"
+      center
+      v-model="updateDialogVisible"
   >
-   <h1 v-if="practiceData.deletePracticeInfo.applicationState==0">确定删除此申请吗？</h1>
+    <el-date-picker
+        v-if="practiceData.updatePracticeInfo.applicationState == 0 "
+        style="width: 180px"
+        v-model="practiceData.updatePracticeInfo.practiceDatetime"
+        type="datetime"
+        placeholder="选择日期"
+        format="YYYY/MM/DD HH:mm:ss"
+        value-format="YYYY-MM-DD HH:mm:ss"
+        :disabled-date="disabledDate"
+    />
+    <h1 v-else>此申请不可修改</h1>
+
+    <template #footer>
+      <el-button @click="updateDialogVisible=false">取消</el-button>
+      <el-button v-if="practiceData.updatePracticeInfo.applicationState != 0 " type="primary"
+                 @click="updateDialogVisible=false">确定
+      </el-button>
+      <el-button v-else type="primary" @click="makeSureUpdate">确定</el-button>
+    </template>
+
+  </el-dialog>
+  <el-dialog
+      title="删除申请"
+      center
+      v-model="deleteDialogVisible"
+      style="width: 30%"
+  >
+    <h1 v-if="practiceData.deletePracticeInfo.applicationState==0">确定删除此申请吗？</h1>
     <h1 v-else>此申请已通过，不可删除</h1>
     <template #footer>
       <el-button @click="deleteDialogVisible=false">取消</el-button>
-      <el-button v-if="practiceData.deletePracticeInfo.applicationState!=0" type="primary" @click="deleteDialogVisible=false">确定</el-button>
-      <el-button v-else type="primary" @click="makeSureDelete" >确定</el-button>
+      <el-button v-if="practiceData.deletePracticeInfo.applicationState!=0" type="primary"
+                 @click="deleteDialogVisible=false">确定
+      </el-button>
+      <el-button v-else type="primary" @click="makeSureDelete">确定</el-button>
     </template>
   </el-dialog>
 
@@ -229,7 +233,7 @@ import {client} from "@/utils/myoss";
 
 
 const fileList = ref<UploadUserFile[]>([])
-const uploadHeadPhoto = ( file:any) => {
+const uploadHeadPhoto = (file: any) => {
   let updateHeadInfo = reactive({}) as student
   updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
   const aliName = userData.personInfo.username + ".jpg"
@@ -261,8 +265,8 @@ const makeSureUpdate = () => {
         message: '修改成功',
         type: 'success'
       })
-       practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId==practiceData.updatePracticeInfo.practiceId),1)
-        practiceApplicationData.push(practiceData.updatePracticeInfo)
+      practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId == practiceData.updatePracticeInfo.practiceId), 1)
+      practiceApplicationData.push(practiceData.updatePracticeInfo)
     } else {
       ElMessage({
         message: '修改失败',
@@ -275,20 +279,20 @@ const makeSureUpdate = () => {
 }
 const updateDialogVisible = ref(false)
 const onDelete = (row: practiceApplication) => { //删除
-        deleteDialogVisible.value= true
-        practiceData.deletePracticeInfo = row
+  deleteDialogVisible.value = true
+  practiceData.deletePracticeInfo = row
 
 }
-const makeSureDelete=()=>{
-  request.get("/practice-application-entity/deletedById/"+practiceData.deletePracticeInfo.practiceId).then((res)=>{
-    if(res.data==1){
+const makeSureDelete = () => {
+  request.get("/practice-application-entity/deletedById/" + practiceData.deletePracticeInfo.practiceId).then((res) => {
+    if (res.data == 1) {
       deleteDialogVisible.value = false
       ElMessage({
         message: '删除成功',
         type: 'success'
       })
-      practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId==practiceData.deletePracticeInfo.practiceId),1)
-    }else{
+      practiceApplicationData.splice(practiceApplicationData.findIndex(item => item.practiceId == practiceData.deletePracticeInfo.practiceId), 1)
+    } else {
       ElMessage({
         message: '删除失败',
         type: 'error'
@@ -324,8 +328,8 @@ const makeSureAdd = () => {
         message: '申请提交成功',
         type: 'success'
       })
-      practiceApplicationData.splice(0,practiceApplicationData.length)
-      request.get("/practice-application-entity/getPracticeApplicationByStudentId/"+myPageInfo.userId+"/"+"科目二").then((res)=>{
+      practiceApplicationData.splice(0, practiceApplicationData.length)
+      request.get("/practice-application-entity/getPracticeApplicationByStudentId/" + myPageInfo.userId + "/" + "科目二").then((res) => {
         practiceApplicationData.push(...res.data)
       })
     } else {
@@ -402,7 +406,7 @@ const practiceApplicationData: practiceApplication[] = reactive([])
 const addPracticeApplicationData = reactive({
   addInfo: {} as practiceApplication
 })
-const practiceData= reactive({
+const practiceData = reactive({
   updatePracticeInfo: {} as practiceApplication,
   deletePracticeInfo: {} as practiceApplication
 })
@@ -432,7 +436,7 @@ const addOrder = () => {
   addDialogVisible.value = true
   addPracticeApplicationData.addInfo.practiceDatetime = ''
   addPracticeApplicationData.addInfo.practiceType = '科目二'
-  addPracticeApplicationData.addInfo.applicationState =0
+  addPracticeApplicationData.addInfo.applicationState = 0
   addPracticeApplicationData.addInfo.coachId = studentData.studentInfo.coachId
   addPracticeApplicationData.addInfo.studentId = myPageInfo.userId
 }

@@ -3,30 +3,41 @@
     <el-container>
       <el-header>
         <el-row :gutter="20" style="height: 100px">
-          <el-col :span="6"  >
+          <el-col :span="6">
             <el-upload
                 v-model:file-list="fileList"
                 class="upload-demo"
                 :http-request="uploadHeadPhoto"
                 :limit="1"
             >
-              <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()" />
+              <Avatar :src="userData.personInfo.headPhoto" :key="new Date().getTime()"/>
             </el-upload>
           </el-col>
-          <el-col :span="6"><div class="grid-content ep-bg-purple" />
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
             科目四学习
           </el-col>
-          <el-col :span="6"><div class="grid-content ep-bg-purple" /></el-col>
-          <el-col :span="6"><div class="grid-content ep-bg-purple" />
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
+          </el-col>
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
             <el-dropdown>
               <el-button type="primary" style="margin-left: 300px">
-                操作<el-icon class="el-icon--right"></el-icon>
+                操作
+                <el-icon class="el-icon--right"></el-icon>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item> <el-button @click="onPersonInfo">个人信息中心</el-button></el-dropdown-item>
-                  <el-dropdown-item> <el-button @click="onHealthy">绑定健康信息</el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button @click="onEsc">退出登录</el-button></el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onPersonInfo">个人信息中心</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onHealthy">绑定健康信息</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button @click="onEsc">退出登录</el-button>
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -62,16 +73,17 @@
             </el-sub-menu>
           </el-menu>
         </el-aside>
-        <el-main >
+        <el-main>
           <div style="display: flex;">
-            <el-card class="box-card"  style="width: 300px;margin-top: 5%;height: 400px;margin-left: 40%">
+            <el-card class="box-card" style="width: 300px;margin-top: 5%;height: 400px;margin-left: 40%">
               <template #header>
                 <div class="card-header">
                   <span>试题学习</span>
                   <el-button class="button" style="margin-left: 90px" @click="onExamTest">点击进入</el-button>
                 </div>
               </template>
-              <el-image src="https://bpic.588ku.com/element_origin_min_pic/21/04/06/f0d082f8abaefe5e0f9ebc74f6a89f0c.jpg"></el-image>
+              <el-image
+                  src="https://bpic.588ku.com/element_origin_min_pic/21/04/06/f0d082f8abaefe5e0f9ebc74f6a89f0c.jpg"></el-image>
             </el-card>
           </div>
         </el-main>
@@ -88,7 +100,7 @@ Setting,
 } from '@element-plus/icons-vue'
 
 <script setup lang="ts">
-import { useRouter} from "vue-router";
+import {useRouter} from "vue-router";
 import {onMounted, reactive, ref} from "vue";
 import request from "@/request/request";
 import health from "@icon-park/vue-next/lib/icons/Health";
@@ -97,12 +109,12 @@ import {client} from "@/utils/myoss";
 import type {student} from "../../../myInterface/entity";
 import Avatar from "@/components/Avatar.vue";
 
-const onExamTest=()=>{
-  router.push({path:'/ExamTest/'+myPageInfo.userId})
+const onExamTest = () => {
+  router.push({path: '/ExamTest/' + myPageInfo.userId})
 }
 
 const fileList = ref<UploadUserFile[]>([])
-const uploadHeadPhoto = ( file:any) => {
+const uploadHeadPhoto = (file: any) => {
   let updateHeadInfo = reactive({}) as student
   updateHeadInfo = JSON.parse(JSON.stringify(userData.personInfo))
   const aliName = userData.personInfo.username + ".jpg"
@@ -122,8 +134,8 @@ const userData = reactive({
   personInfo: {} as student,
 })
 
-onMounted(()=>{
-  myPageInfo.userId =  <string>router.currentRoute.value.params.userid
+onMounted(() => {
+  myPageInfo.userId = <string>router.currentRoute.value.params.userid
 
   request.get("/student-entity/selectStudentById/" + myPageInfo.userId).then(res => {
     userData.personInfo = res.data
@@ -132,64 +144,62 @@ onMounted(()=>{
 })
 
 
+const router = useRouter()
 
-const router =  useRouter()
-
-const myPageInfo=reactive({
-  userId:'',
+const myPageInfo = reactive({
+  userId: '',
 })
 
 const onEsc = () => {
   router.push({
-    path:'/'
+    path: '/'
   })
 
 }
 const onPersonInfo = () => {
   router.push({
-    path:'/PersonInfo/'+myPageInfo.userId
+    path: '/PersonInfo/' + myPageInfo.userId
   })
 
 }
 const OnSubjectOne = () => {
   router.push({
-    path:'/SubjectOne/'+myPageInfo.userId
+    path: '/SubjectOne/' + myPageInfo.userId
   })
 }
 const OnSubjectTwo = () => {
   router.push({
-    path:'/SubjectTwo/'+myPageInfo.userId
+    path: '/SubjectTwo/' + myPageInfo.userId
   })
 }
 const onHealthy = () => {
   router.push({
-    path:'/Healthy/'+myPageInfo.userId
+    path: '/Healthy/' + myPageInfo.userId
   })
 }
 
 
 const OnSubjectThreePractice = () => {
   router.push({
-    path:'/SubjectThreePractice/'+myPageInfo.userId
+    path: '/SubjectThreePractice/' + myPageInfo.userId
   })
 }
 const OnSubjectThreeTheory = () => {
   router.push({
-    path:'/SubjectThreeTheory/'+myPageInfo.userId
+    path: '/SubjectThreeTheory/' + myPageInfo.userId
   })
 }
 const onExam = () => {
   router.push({
-    path:'/Exam/'+myPageInfo.userId
+    path: '/Exam/' + myPageInfo.userId
   })
 }
 const onExamRegistration = () => {
   router.push({
-    path:'/ExamRegistration/'+myPageInfo.userId
+    path: '/ExamRegistration/' + myPageInfo.userId
   })
 }
-const openeds = ref(["1-2","1-3","1-4","1-5","1-6","1-7"])
-
+const openeds = ref(["1-2", "1-3", "1-4", "1-5", "1-6", "1-7"])
 
 
 </script>

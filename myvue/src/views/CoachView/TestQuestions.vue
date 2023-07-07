@@ -10,7 +10,9 @@
     <el-button style="position: absolute;left: 20%;top: 7%" type="primary" @click="searchChoice">查找</el-button>
     <br>
     <h2>选择题</h2>
-    <el-table :data="allChoiceData">
+    <el-table :data="allChoiceData"
+              :header-cell-style="{background: '#409EFF', color: '#fff' }"
+    >
       <el-table-column prop="multipleChoiceDescribe" label="题目" width="200"/>
       <el-table-column prop="option1" label="A"/>
       <el-table-column prop="option2" label="B"/>
@@ -348,7 +350,7 @@ export default defineComponent({
           deleteChoiceVisible.value = false
         }
         if (deleteChoiceUrl.value != '') {
-          client.delete("/questionPhoto/" + deleteChoiceId.value+'.jpg').then(res => {
+          client.delete("/questionPhoto/" + deleteChoiceId.value + '.jpg').then(res => {
             console.log(res)
           })
         }
@@ -473,9 +475,9 @@ export default defineComponent({
     const fileList = ref<UploadUserFile[]>([])
     const uploadPhoto = (file: any) => {
       const aliName = editChoiceData.value.multipleChoiceId + '.jpg'
-      client.put("/questionPhoto/"+aliName,file.file).then((res:any)=>{
+      client.put("/questionPhoto/" + aliName, file.file).then((res: any) => {
         console.log(res)
-        editChoiceData.value.photoUrl=res.url
+        editChoiceData.value.photoUrl = res.url
         axios.post("http://localhost:9090/multiple-choice-entity/editChoiceById", editChoiceData.value).then(resp => {
           if (resp.data != null) {
             ElMessage({
@@ -483,7 +485,7 @@ export default defineComponent({
               message: '更换成功',
               type: 'success',
             })
-            allChoiceData.value.splice(0,allChoiceData.value.length)
+            allChoiceData.value.splice(0, allChoiceData.value.length)
             allChoiceData.value.push(...resp.data)
             editChoicePhotoVisible.value = false
           }
